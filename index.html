@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Centro Médico Docente La Trinidad - Unidad de Insuficiencia Cardíaca">
+  <link rel="icon" href="https://www.cmdlt.edu.ve/wp-content/uploads/2019/09/favicon-cmdlt.png">
+  <title>Centro Médico La Trinidad - Unidad de Insuficiencia Cardíaca</title>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #003366;
+      --secondary: #0066CC;
+      --accent: #1ABC9C;
+      --background: #FFFFFF;
+      --text-primary: #1ABC9C;
+      --link: #1ABC9C;
+      --muted: #666666;
+      --border: #ADADAD;
+      --success: #17A34A;
+      --warning: #EAB308;
+      --danger: #DC2626;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      background: #f5f5f5;
+      color: #333333;
+    }
+
+    /* Layout */
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+
+    /* Header / Nav */
+    header {
+      background: white;
+      border-bottom: 1px solid #e5e5e5;
+      padding: 16px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    header .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 20px;
+      font-weight: 600;
+      color: #2f6feb;
+    }
+
+    nav {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+    }
+
+    nav a, nav button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      color: #6b6b6b;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    nav a:hover, nav button:hover {
+      color: #111;
+    }
+
+    /* Login Screen */
+    .screen {
+      display: none;
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    #login-screen {
+      display: flex !important;
+      min-height: 100vh;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #2f6feb 0%, #1a4db8 100%);
+    }
+
+    .login-card {
+      background: white;
+      padding: 48px 32px;
+      border-radius: 12px;
+      max-width: 420px;
+      width: 100%;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    }
+
+    .login-card h1 {
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+
+    .login-card p {
+      color: #6b6b6b;
+      margin-bottom: 32px;
+      font-size: 14px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1px solid #e5e5e5;
+      border-radius: 8px;
+      font-size: 14px;
+      transition: border-color 0.2s;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: #2f6feb;
+    }
+
+    .btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-primary {
+      width: 100%;
+      background: #2f6feb;
+      color: white;
+      margin-top: 24px;
+    }
+
+    .btn-primary:hover {
+      background: #1a4db8;
+    }
+
+    .demo-creds {
+      margin-top: 24px;
+      padding-top: 24px;
+      border-top: 1px solid #e5e5e5;
+    }
+
+    .demo-creds p {
+      font-size: 12px;
+      color: #6b6b6b;
+      margin-bottom: 8px;
+    }
+
+    .demo-creds button {
+      background: #f5f5f5;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      cursor: pointer;
+      margin-right: 8px;
+      transition: background 0.2s;
+    }
+
+    .demo-creds button:hover {
+      background: #e5e5e5;
+    }
+
+    /* Dashboard */
+    .dashboard-layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 24px;
+      padding: 24px 0;
+    }
+
+    @media (max-width: 1024px) {
+      .dashboard-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        display: none;
+      }
+
+      .sidebar.mobile-open {
+        display: block;
+        position: fixed;
+        left: 0;
+        top: 60px;
+        width: 100%;
+        height: calc(100vh - 60px);
+        background: white;
+        z-index: 200;
+      }
+    }
+
+    .sidebar {
+      background: white;
+      border-radius: 8px;
+      padding: 16px;
+      border: 1px solid #e5e5e5;
+      height: fit-content;
+      position: sticky;
+      top: 80px;
+    }
+
+    .sidebar h3 {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+      color: #6b6b6b;
+    }
+
+    .sidebar-menu {
+      list-style: none;
+    }
+
+    .sidebar-menu li {
+      margin-bottom: 8px;
+    }
+
+    .sidebar-menu button {
+      width: 100%;
+      text-align: left;
+      padding: 12px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      border-radius: 6px;
+      font-size: 14px;
+      transition: all 0.2s;
+      color: #6b6b6b;
+    }
+
+    .sidebar-menu button:hover,
+    .sidebar-menu button.active {
+      background: #f5f5f5;
+      color: #2f6feb;
+      font-weight: 500;
+    }
+
+    /* Cards */
+    .card {
+      background: white;
+      border: 1px solid #e5e5e5;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .card h2 {
+      font-size: 18px;
+      margin-bottom: 16px;
+    }
+
+    .card h3 {
+      font-size: 14px;
+      margin-bottom: 12px;
+      color: #6b6b6b;
+    }
+
+    /* Grid */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .stat-card {
+      background: white;
+      border: 1px solid #e5e5e5;
+      border-radius: 8px;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 32px;
+      font-weight: 600;
+      color: #2f6feb;
+      margin-bottom: 8px;
+    }
+
+    .stat-label {
+      font-size: 13px;
+      color: #6b6b6b;
+    }
+
+    /* Alert boxes */
+    .alert {
+      padding: 16px;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      border-left: 4px solid;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .alert.critical {
+      background: #fef2f2;
+      border-left-color: #dc2626;
+      color: #7f1d1d;
+    }
+
+    .alert.high {
+      background: #fef3c7;
+      border-left-color: #eab308;
+      color: #78350f;
+    }
+
+    .alert.medium {
+      background: #dbeafe;
+      border-left-color: #3b82f6;
+      color: #1e3a8a;
+    }
+
+    .alert-content {
+      flex: 1;
+    }
+
+    .alert-title {
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+
+    .alert-message {
+      font-size: 13px;
+    }
+
+    .alert-close {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 18px;
+      opacity: 0.6;
+    }
+
+    /* Search */
+    .search-box {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .search-box input {
+      flex: 1;
+      padding: 12px 16px;
+      border: 1px solid #e5e5e5;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+
+    .search-box button {
+      padding: 12px 24px;
+      background: #2f6feb;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    /* Table */
+    .table-container {
+      overflow-x: auto;
+      margin-bottom: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    th {
+      background: #f5f5f5;
+      padding: 12px;
+      text-align: left;
+      font-weight: 600;
+      border-bottom: 1px solid #e5e5e5;
+      color: #6b6b6b;
+    }
+
+    td {
+      padding: 12px;
+      border-bottom: 1px solid #e5e5e5;
+    }
+
+    tr:hover {
+      background: #f5f5f5;
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 12px;
+      padding: 32px;
+      max-width: 500px;
+      width: 90%;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+    }
+
+    .modal-close {
+      float: right;
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: #6b6b6b;
+    }
+
+    /* Charts (placeholder) */
+    .chart-container {
+      height: 300px;
+      background: #f9f9f9;
+      border: 1px solid #e5e5e5;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #6b6b6b;
+      margin-bottom: 20px;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .container {
+        padding: 0 12px;
+      }
+
+      .login-card {
+        padding: 32px 20px;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .card {
+        padding: 16px;
+      }
+
+      .modal-content {
+        padding: 24px;
+        width: 95%;
+      }
+
+      nav {
+        gap: 12px;
+        font-size: 12px;
+      }
+    }
+
+    /* Loading */
+    .loading {
+      text-align: center;
+      padding: 40px 20px;
+      color: #6b6b6b;
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid #e5e5e5;
+      border-top-color: #2f6feb;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin-right: 10px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Buttons */
+    .btn-group {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .btn-secondary {
+      background: white;
+      border: 1px solid #e5e5e5;
+      color: #111;
+      padding: 10px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    .btn-secondary:hover {
+      background: #f5f5f5;
+    }
+
+    .btn-danger {
+      background: #dc2626;
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background: #991b1b;
+    }
+  </style>
+</head>
+<body>
+  <!-- Login Screen -->
+  <div id="login-screen" class="screen active">
+    <div class="login-card">
+      <img src="https://www.cmdlt.edu.ve/wp-content/uploads/2021/01/logo-centro-medico-docente-la-trinidad.svg" alt="Centro Médico Docente La Trinidad" style="height: 60px; margin-bottom: 16px; max-width: 100%;">
+      <p>Unidad de Insuficiencia Cardíaca</p>
+
+      <form id="login-form" onsubmit="handleLogin(event)">
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="email" required placeholder="usuario@example.com">
+        </div>
+
+        <div class="form-group">
+          <label>Contraseña</label>
+          <input type="password" id="password" required placeholder="••••••••">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
+
+        <div id="login-error" style="color: #dc2626; margin-top: 12px; font-size: 13px;"></div>
+      </form>
+
+      <div class="demo-creds">
+        <p><strong>Credenciales de demo:</strong></p>
+        <button onclick="setDemoLogin('paciente@mail.com', 'password123')">
+          👤 Paciente
+        </button>
+        <button onclick="setDemoLogin('medico@cmdlt.com', 'password123')">
+          👨‍⚕️ Doctor
+        </button>
+        <button onclick="setDemoLogin('enfermera@cmdlt.com', 'password123')">
+          👩‍⚕️ Enfermera
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Doctor Dashboard -->
+  <div id="doctor-screen" class="screen">
+    <header>
+      <div class="container">
+        <div class="logo"><img src="https://www.cmdlt.edu.ve/wp-content/uploads/2021/01/logo-centro-medico-docente-la-trinidad.svg" alt="Centro Médico Docente La Trinidad" style="height: 40px; vertical-align: middle;"></div>
+        <nav>
+          <span id="user-name"></span>
+          <button onclick="logout()">Cerrar Sesión</button>
+        </nav>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="dashboard-layout">
+        <aside class="sidebar">
+          <h3>Menú</h3>
+          <ul class="sidebar-menu">
+            <li><button class="active" onclick="switchView('doctor-dashboard')">Dashboard</button></li>
+            <li><button onclick="switchView('doctor-patients')">Pacientes</button></li>
+            <li><button onclick="switchView('doctor-alerts')">Alertas Críticas</button></li>
+          </ul>
+        </aside>
+
+        <main>
+          <!-- Dashboard View -->
+          <div id="doctor-dashboard" class="view-content">
+            <div class="card">
+              <h2>📊 Resumen General</h2>
+              <div class="grid">
+                <div class="stat-card">
+                  <div class="stat-value" id="total-patients">0</div>
+                  <div class="stat-label">Pacientes en Seguimiento</div>
+                </div>
+                <div class="stat-card">
+                  <div class="stat-value" id="critical-alerts">0</div>
+                  <div class="stat-label">Alertas Críticas</div>
+                </div>
+                <div class="stat-card">
+                  <div class="stat-value" id="high-alerts">0</div>
+                  <div class="stat-label">Alertas Altas</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <h2>🚨 Alertas Recientes</h2>
+              <div id="recent-alerts-container"></div>
+            </div>
+          </div>
+
+          <!-- Patients View -->
+          <div id="doctor-patients" class="view-content" style="display: none;">
+            <div class="card">
+              <h2>🔍 Búsqueda de Pacientes</h2>
+              <div class="search-box">
+                <input type="text" id="patient-search" placeholder="Buscar por nombre o email...">
+                <button onclick="searchPatients()">Buscar</button>
+              </div>
+
+              <div class="table-container">
+                <table id="patients-table">
+                  <thead>
+                    <tr>
+                      <th>Nombre</th>
+                      <th>Email</th>
+                      <th>Edad</th>
+                      <th>Teléfono</th>
+                      <th>Acción</th>
+                    </tr>
+                  </thead>
+                  <tbody id="patients-tbody">
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Patient Detail Modal -->
+          <div id="patient-detail-modal" class="modal">
+            <div class="modal-content">
+              <button class="modal-close" onclick="closePatientDetail()">×</button>
+              <h2 id="patient-detail-name"></h2>
+              <p id="patient-detail-condition" style="color: #6b6b6b; margin-bottom: 20px;"></p>
+
+              <h3>Últimos Signos Vitales</h3>
+              <div id="patient-vitals-detail"></div>
+
+              <h3>Alertas Activas</h3>
+              <div id="patient-alerts-detail"></div>
+            </div>
+          </div>
+
+          <!-- Critical Alerts View -->
+          <div id="doctor-alerts" class="view-content" style="display: none;">
+            <div class="card">
+              <h2>🚨 Alertas Críticas en Tiempo Real</h2>
+              <div id="critical-alerts-container"></div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+  </div>
+
+  <!-- Patient Dashboard -->
+  <div id="patient-screen" class="screen">
+    <header>
+      <div class="container">
+        <div class="logo"><img src="https://www.cmdlt.edu.ve/wp-content/uploads/2021/01/logo-centro-medico-docente-la-trinidad.svg" alt="Centro Médico Docente La Trinidad" style="height: 40px; vertical-align: middle;"></div>
+        <nav>
+          <span id="patient-user-name"></span>
+          <button onclick="logout()">Cerrar Sesión</button>
+        </nav>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="dashboard-layout">
+        <aside class="sidebar">
+          <h3>Mi Salud</h3>
+          <ul class="sidebar-menu">
+            <li><button class="active" onclick="switchPatientView('patient-dashboard')">Dashboard</button></li>
+            <li><button onclick="switchPatientView('patient-record')">Registrar Síntomas</button></li>
+            <li><button onclick="switchPatientView('patient-history')">Histórico</button></li>
+          </ul>
+        </aside>
+
+        <main>
+          <!-- Patient Dashboard -->
+          <div id="patient-dashboard" class="view-content">
+            <div class="card">
+              <h2>💓 Mi Estado Actual</h2>
+              <div class="grid">
+                <div class="stat-card">
+                  <div class="stat-value" id="latest-systolic">-</div>
+                  <div class="stat-label">Presión Sistólica</div>
+                </div>
+                <div class="stat-card">
+                  <div class="stat-value" id="latest-diastolic">-</div>
+                  <div class="stat-label">Presión Diastólica</div>
+                </div>
+                <div class="stat-card">
+                  <div class="stat-value" id="latest-hr">-</div>
+                  <div class="stat-label">Frecuencia Cardíaca</div>
+                </div>
+                <div class="stat-card">
+                  <div class="stat-value" id="latest-weight">-</div>
+                  <div class="stat-label">Peso (kg)</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <h2>⚠️ Mis Alertas</h2>
+              <div id="patient-alerts-container"></div>
+            </div>
+          </div>
+
+          <!-- Record Symptoms -->
+          <div id="patient-record" class="view-content" style="display: none;">
+            <div class="card">
+              <h2>📝 Registrar Síntomas y Signos Vitales</h2>
+
+              <form id="record-form" onsubmit="submitVitalRecord(event)">
+                <div class="form-group">
+                  <label>Presión Sistólica (mmHg)</label>
+                  <input type="number" id="record-systolic" required min="60" max="200">
+                </div>
+
+                <div class="form-group">
+                  <label>Presión Diastólica (mmHg)</label>
+                  <input type="number" id="record-diastolic" required min="40" max="120">
+                </div>
+
+                <div class="form-group">
+                  <label>Frecuencia Cardíaca (lpm)</label>
+                  <input type="number" id="record-hr" required min="30" max="200">
+                </div>
+
+                <div class="form-group">
+                  <label>Peso (kg)</label>
+                  <input type="number" id="record-weight" required min="30" max="200" step="0.1">
+                </div>
+
+                <div class="form-group">
+                  <label>Disnea (0=ninguna, 4=grave)</label>
+                  <input type="number" id="record-dyspnea" required min="0" max="4">
+                </div>
+
+                <div class="form-group">
+                  <label>Edema (0=ninguno, 3=grave)</label>
+                  <input type="number" id="record-edema" required min="0" max="3">
+                </div>
+
+                <div class="form-group">
+                  <label>Notas Adicionales</label>
+                  <textarea id="record-notes" placeholder="Cómo se siente hoy..."
+                    style="width: 100%; padding: 10px; border: 1px solid #e5e5e5; border-radius: 6px; resize: vertical; min-height: 80px;"></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Guardar Registro</button>
+                <div id="record-message" style="margin-top: 12px;"></div>
+              </form>
+            </div>
+          </div>
+
+          <!-- History -->
+          <div id="patient-history" class="view-content" style="display: none;">
+            <div class="card">
+              <h2>📊 Histórico de Registros</h2>
+              <div class="table-container">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Fecha</th>
+                      <th>Presión (SYS/DIA)</th>
+                      <th>FC (lpm)</th>
+                      <th>Peso (kg)</th>
+                      <th>Disnea</th>
+                      <th>Edema</th>
+                    </tr>
+                  </thead>
+                  <tbody id="history-tbody">
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+  </div>
+
+  <!-- Nurse/Monitor Dashboard -->
+  <div id="monitor-screen" class="screen">
+    <header>
+      <div class="container">
+        <div class="logo"><img src="https://www.cmdlt.edu.ve/wp-content/uploads/2021/01/logo-centro-medico-docente-la-trinidad.svg" alt="Centro Médico Docente La Trinidad" style="height: 40px; vertical-align: middle;"></div>
+        <nav>
+          <span id="monitor-user-name"></span>
+          <button onclick="logout()">Cerrar Sesión</button>
+        </nav>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="dashboard-layout">
+        <aside class="sidebar">
+          <h3>Menú</h3>
+          <ul class="sidebar-menu">
+            <li><button class="active" onclick="switchMonitorView('monitor-dashboard')">Dashboard</button></li>
+ 
