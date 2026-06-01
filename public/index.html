@@ -446,7 +446,7 @@
       background: white;
       border-radius: 12px;
       padding: 32px;
-      max-width: 500px;
+      max-width: 800px;
       width: 90%;
       max-height: 90vh;
       overflow-y: auto;
@@ -680,14 +680,44 @@
               <h2 id="patient-detail-name"></h2>
               <p id="patient-detail-condition" style="color: #6b6b6b; margin-bottom: 20px;"></p>
 
-              <h3>Últimos Signos Vitales</h3>
-              <div id="patient-vitals-detail"></div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+                <div>
+                  <h3>Últimos Signos Vitales</h3>
+                  <div id="patient-vitals-detail"></div>
 
-              <h3 style="margin-top: 16px;">Alertas Activas</h3>
-              <div id="patient-alerts-detail"></div>
+                  <h3 style="margin-top: 16px;">Alertas Activas</h3>
+                  <div id="patient-alerts-detail"></div>
 
-              <h3 style="margin-top: 16px;">Telemonitoreo (Enfermería)</h3>
-              <div id="patient-surveys-detail"></div>
+                  <h3 style="margin-top: 16px;">Telemonitoreo (Enfermería)</h3>
+                  <div id="patient-surveys-detail"></div>
+                </div>
+                
+                <div>
+                  <h3>Tratamiento Farmacológico Actual</h3>
+                  <div id="patient-medications-detail" style="margin-bottom: 20px;"></div>
+
+                  <div style="background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px;">
+                    <h3 style="margin-bottom: 12px; color: #111827;">Recetar Nuevo Tratamiento</h3>
+                    <form id="prescription-form" onsubmit="submitPrescription(event)">
+                      <div class="form-group">
+                        <label>Medicamento</label>
+                        <input type="text" id="prescription-name" required placeholder="Ej: Furosemida">
+                      </div>
+                      <div class="form-group" style="display: flex; gap: 12px;">
+                        <div style="flex: 1;">
+                          <label>Dosis</label>
+                          <input type="text" id="prescription-dosage" required placeholder="Ej: 40mg">
+                        </div>
+                        <div style="flex: 1;">
+                          <label>Frecuencia</label>
+                          <input type="text" id="prescription-frequency" required placeholder="Ej: 1 cada 24h">
+                        </div>
+                      </div>
+                      <button type="submit" class="btn btn-primary" style="margin-top: 8px;">Recetar Tratamiento</button>
+                    </form>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -991,7 +1021,12 @@
           <!-- Treatment -->
           <div id="patient-treatment" class="view-content" style="display: none;">
             <div class="card">
-              <h2>💊 Tratamiento Farmacológico Base</h2>
+              <h2>💊 Mi Tratamiento Farmacológico</h2>
+              <div id="patient-prescriptions-container" style="margin-top: 16px; margin-bottom: 32px;">
+                <!-- Receta médica se cargará aquí -->
+              </div>
+
+              <h2>📘 Guía de Fármacos</h2>
               <div style="margin-top: 16px;">
                 <p style="color: #6b6b6b; margin-bottom: 16px;">Guía de los medicamentos más comunes recetados para la Insuficiencia Cardíaca y su uso. <strong>Nunca te automediques ni cambies las dosis sin consultar a tu médico.</strong></p>
 

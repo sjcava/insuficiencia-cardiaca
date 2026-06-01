@@ -101,4 +101,18 @@ router.put('/:id', async (req, res) => {
   }
 });
 
+// Add medication to patient
+router.post('/:id/medications', async (req, res) => {
+  try {
+    const { name, dosage, frequency } = req.body;
+    await db.run(
+      'INSERT INTO medications (user_id, name, dosage, frequency, start_date) VALUES (?, ?, ?, ?, DATE("now"))',
+      [req.params.id, name, dosage, frequency]
+    );
+    res.status(201).json({ message: 'Medication added successfully' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 module.exports = router;

@@ -131,7 +131,7 @@ function loadPatientsList() {
       <td>${p.age || '-'}</td>
       <td>${p.phone || '-'}</td>
       <td>
-        <button class="btn-secondary" onclick="viewPatientDetail(${p.id})">Ver Detalles</button>
+        <button class="btn-secondary" onclick="viewPatientDetail(${p.id})">Historia Clínica</button>
       </td>
     </tr>
   `).join('');
@@ -158,7 +158,7 @@ async function searchPatients() {
         <td>${p.age || '-'}</td>
         <td>${p.phone || '-'}</td>
         <td>
-          <button class="btn-secondary" onclick="viewPatientDetail(${p.id})">Ver Detalles</button>
+          <button class="btn-secondary" onclick="viewPatientDetail(${p.id})">Historia Clínica</button>
         </td>
       </tr>
     `).join('');
@@ -216,6 +216,18 @@ async function viewPatientDetail(patientId) {
 
     document.getElementById('patient-surveys-detail').innerHTML = surveysHtml || '<p style="color: #6b6b6b;">Sin encuestas telefónicas</p>';
 
+    const medicationsHtml = (currentPatient.medications || []).map(m => `
+      <div style="padding: 12px; border: 1px solid #e5e5e5; border-radius: 6px; margin-bottom: 8px; background: white;">
+        <div style="font-weight: bold; font-size: 14px;">💊 ${m.name}</div>
+        <div style="font-size: 13px; color: #374151; margin-top: 4px;">
+          Dosis: ${m.dosage} | Frecuencia: ${m.frequency}
+        </div>
+        <div style="font-size: 12px; color: #6b6b6b; margin-top: 4px;">Inicio: ${new Date(m.start_date || m.created_at).toLocaleDateString('es-ES')}</div>
+      </div>
+    `).join('');
+
+    document.getElementById('patient-medications-detail').innerHTML = medicationsHtml || '<p style="color: #6b6b6b;">Sin medicamentos recetados</p>';
+
     document.getElementById('patient-detail-modal').classList.add('active');
   } catch (error) {
     console.error('Error loading patient detail:', error);
@@ -224,6 +236,41 @@ async function viewPatientDetail(patientId) {
 
 function closePatientDetail() {
   document.getElementById('patient-detail-modal').classList.remove('active');
+}
+
+async function submitPrescription(event) {
+  event.preventDefault();
+  
+  if (!currentPatient) return;
+
+  const payload = {
+    name: document.getElementById('prescription-name').value,
+    dosage: document.getElementById('prescription-dosage').value,
+    frequency: document.getElementById('prescription-frequency').value
+  };
+
+  try {
+    const response = await fetch(`${API_URL}/patients/${currentPatient.id}/medications`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      },
+      body: JSON.stringify(payload)
+    });
+
+    if (response.ok) {
+      document.getElementById('prescription-form').reset();
+      // Reload patient details to show the new medication
+      viewPatientDetail(currentPatient.id);
+    } else {
+      const data = await response.json();
+      alert('Error: ' + data.error);
+    }
+  } catch (error) {
+    console.error('Error submitting prescription:', error);
+    alert('Ocurrió un error al recetar el tratamiento.');
+  }
 }
 
 async function markAlertRead(alertId) {
@@ -277,6 +324,40 @@ async function loadPatientDashboard() {
     `).join('');
 
     document.getElementById('patient-alerts-container').innerHTML = alertsHtml || '<p style="color: #6b6b6b;">Sin alertas activas</p>';
+
+    // Render Prescription (Receta Médica)
+    if (patientData.medications && patientData.medications.length > 0) {
+      const prescriptionsHtml = `
+        <div style="background: #fff; border: 2px solid #e5e5e5; border-radius: 8px; padding: 24px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); font-family: 'Times New Roman', serif;">
+          <div style="text-align: center; border-bottom: 2px solid #2f6feb; padding-bottom: 16px; margin-bottom: 20px;">
+            <img src="https://www.cmdlt.edu.ve/wp-content/uploads/2021/01/logo-centro-medico-docente-la-trinidad.svg" alt="Hospital Logo" style="height: 40px; margin-bottom: 8px;">
+            <h3 style="color: #2f6feb; font-family: 'Source Sans Pro', sans-serif;">RECETA MÉDICA</h3>
+            <p style="font-size: 14px; color: #6b6b6b; font-family: 'Source Sans Pro', sans-serif;">Unidad de Insuficiencia Cardíaca</p>
+          </div>
+          <div style="margin-bottom: 24px; font-size: 16px;">
+            <p><strong>Paciente:</strong> ${patientData.name}</p>
+            <p><strong>Fecha de Emisión:</strong> ${new Date().toLocaleDateString('es-ES')}</p>
+          </div>
+          <div style="margin-bottom: 32px;">
+            <h4 style="font-style: italic; font-size: 18px; margin-bottom: 16px; border-bottom: 1px dashed #ccc; padding-bottom: 8px;">Rx</h4>
+            <ul style="list-style-type: none; padding: 0;">
+              ${patientData.medications.map(m => `
+                <li style="margin-bottom: 16px;">
+                  <div style="font-weight: bold; font-size: 18px;">${m.name}</div>
+                  <div style="margin-top: 4px; font-size: 16px;">Tomar ${m.dosage}, ${m.frequency}</div>
+                </li>
+              `).join('')}
+            </ul>
+          </div>
+          <div style="text-align: right; border-top: 1px solid #e5e5e5; padding-top: 16px;">
+            <p style="font-family: 'Source Sans Pro', sans-serif; font-size: 14px; color: #6b6b6b;">Firma del Médico Tratante</p>
+          </div>
+        </div>
+      `;
+      document.getElementById('patient-prescriptions-container').innerHTML = prescriptionsHtml;
+    } else {
+      document.getElementById('patient-prescriptions-container').innerHTML = '<p style="color: #6b6b6b;">No tienes tratamientos farmacológicos recetados activos.</p>';
+    }
 
     // Load history
     loadPatientHistory();
