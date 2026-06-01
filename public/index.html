@@ -720,6 +720,7 @@
             <li><button class="active" onclick="switchPatientView('patient-dashboard')">Dashboard</button></li>
             <li><button onclick="switchPatientView('patient-record')">Registrar Síntomas</button></li>
             <li><button onclick="switchPatientView('patient-history')">Histórico</button></li>
+            <li><button onclick="switchPatientView('patient-recommendations')">Recomendaciones</button></li>
           </ul>
         </aside>
 
@@ -821,6 +822,57 @@
                   <tbody id="history-tbody">
                   </tbody>
                 </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Recommendations -->
+          <div id="patient-recommendations" class="view-content" style="display: none;">
+            <div class="card">
+              <h2>💡 Recomendaciones Médicas</h2>
+              <div style="margin-top: 16px;">
+                <p style="color: #6b6b6b; margin-bottom: 16px;">Estas son las indicaciones generales a seguir si presentas valores fuera del rango normal o síntomas de descompensación:</p>
+                
+                <div class="alert high" style="margin-bottom: 16px; border-left-color: #eab308; background: #fef3c7;">
+                  <div class="alert-content">
+                    <div class="alert-title" style="color: #78350f;">Presión Arterial Alta (>140/90)</div>
+                    <div class="alert-message" style="color: #78350f;">
+                      <ul style="margin-left: 20px; margin-top: 8px;">
+                        <li>Mantén el reposo y evita situaciones de estrés.</li>
+                        <li>Verifica que hayas tomado tu medicación antihipertensiva.</li>
+                        <li>Reduce al mínimo el consumo de sal en tus comidas.</li>
+                        <li>Si la presión sistólica supera los 160 mmHg, comunícate de inmediato con la unidad médica.</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="alert high" style="margin-bottom: 16px; border-left-color: #3b82f6; background: #dbeafe;">
+                  <div class="alert-content">
+                    <div class="alert-title" style="color: #1e3a8a;">Aumento de Peso (Más de 2kg en 72h) o Edema</div>
+                    <div class="alert-message" style="color: #1e3a8a;">
+                      <ul style="margin-left: 20px; margin-top: 8px;">
+                        <li>Puede indicar retención de líquidos. Restringe tu consumo de agua y líquidos en general.</li>
+                        <li>Eleva las piernas mientras estés sentado o acostado para ayudar a disminuir la hinchazón.</li>
+                        <li>Revisa estrictamente tu ingesta de sodio (sal).</li>
+                        <li>Si la hinchazón empeora rápidamente, avisa a tu médico.</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="alert critical" style="margin-bottom: 16px; border-left-color: #dc2626; background: #fef2f2;">
+                  <div class="alert-content">
+                    <div class="alert-title" style="color: #7f1d1d;">Dificultad Respiratoria (Disnea) o Taquicardia</div>
+                    <div class="alert-message" style="color: #7f1d1d;">
+                      <ul style="margin-left: 20px; margin-top: 8px;">
+                        <li>Si te falta el aire estando en reposo o al acostarte plano, incorpórate y usa almohadas adicionales.</li>
+                        <li>Trata de relajarte y mantener la calma, respirando profunda y lentamente.</li>
+                        <li>Si la falta de aire es muy fuerte o tu frecuencia cardíaca no baja de 100 lpm en reposo, acude a urgencias.</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
