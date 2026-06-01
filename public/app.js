@@ -113,6 +113,7 @@ async function loadDoctorDashboard() {
     `).join('');
 
     document.getElementById('recent-alerts-container').innerHTML = alertsHtml || '<p style="color: #6b6b6b;">Sin alertas críticas</p>';
+    document.getElementById('critical-alerts-container').innerHTML = alertsHtml || '<p style="color: #6b6b6b;">Sin alertas críticas</p>';
 
     // Load patients list
     loadPatientsList();
