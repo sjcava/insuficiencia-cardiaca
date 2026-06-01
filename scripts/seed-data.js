@@ -287,6 +287,23 @@ const seedDatabase = async () => {
       console.log(`Created ${bnpRecords.length} BNP records for patient ${i + 1}/5`);
     }
 
+    console.log('\nGenerating critical alerts...\n');
+
+    const mockAlerts = [
+      { user_id: patientIds[0], type: 'weight_gain', severity: 'critical', message: 'Aumento de peso severo de 3kg en 2 días detectado.' },
+      { user_id: patientIds[1], type: 'dyspnea', severity: 'critical', message: 'Paciente reporta disnea nivel 4 (en reposo).' },
+      { user_id: patientIds[2], type: 'high_pressure', severity: 'critical', message: 'Presión arterial crítica: 185/115 mmHg.' }
+    ];
+
+    for (const alert of mockAlerts) {
+      await db.run(
+        `INSERT INTO alerts (user_id, type, severity, message, read)
+         VALUES (?, ?, ?, ?, ?)`,
+        [alert.user_id, alert.type, alert.severity, alert.message, 0]
+      );
+    }
+    console.log(`Created ${mockAlerts.length} critical alerts`);
+
     console.log('\nAdding sample medications...\n');
 
     // Add sample medications
