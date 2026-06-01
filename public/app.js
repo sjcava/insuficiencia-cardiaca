@@ -445,8 +445,10 @@ function switchPatientView(viewName) {
   document.querySelectorAll('#patient-screen .view-content').forEach(v => v.style.display = 'none');
   document.getElementById(viewName).style.display = 'block';
 
-  document.querySelectorAll('#patient-screen .sidebar-menu button').forEach(b => b.classList.remove('active'));
-  event.target.classList.add('active');
+  if (event && event.target) {
+    document.querySelectorAll('#patient-screen .horizontal-menu button').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+  }
 }
 
 // ==================== Monitor Dashboard ====================

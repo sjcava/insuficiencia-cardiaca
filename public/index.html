@@ -271,6 +271,48 @@
       font-weight: 500;
     }
 
+    /* Patient Horizontal Menu */
+    .patient-nav-container {
+      margin-top: 24px;
+      margin-bottom: 24px;
+      display: flex;
+      justify-content: center;
+    }
+    
+    .horizontal-menu {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      background: white;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #e5e5e5;
+      justify-content: center;
+    }
+    
+    .horizontal-menu li {
+      margin: 0;
+    }
+    
+    .horizontal-menu button {
+      padding: 10px 16px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      border-radius: 6px;
+      font-size: 14px;
+      transition: all 0.2s;
+      color: #6b6b6b;
+      font-weight: 500;
+    }
+    
+    .horizontal-menu button:hover,
+    .horizontal-menu button.active {
+      background: #2f6feb;
+      color: white;
+    }
+
     /* Cards */
     .card {
       background: white;
@@ -746,20 +788,18 @@
     </header>
 
     <div class="container">
-      <div class="dashboard-layout">
-        <aside class="sidebar">
-          <h3>Mi Salud</h3>
-          <ul class="sidebar-menu">
-            <li><button class="active" onclick="switchPatientView('patient-dashboard')">Dashboard</button></li>
-            <li><button onclick="switchPatientView('patient-treatment')">Tratamiento Farmacológico</button></li>
-            <li><button onclick="switchPatientView('patient-record')">Registrar Síntomas</button></li>
-            <li><button onclick="switchPatientView('patient-history')">Histórico</button></li>
-            <li><button onclick="switchPatientView('patient-recommendations')">Recomendaciones</button></li>
-            <li><button onclick="switchPatientView('patient-alarms')">Signos de Alarma</button></li>
-          </ul>
-        </aside>
+      <nav class="patient-nav-container">
+        <ul class="horizontal-menu" id="patient-horizontal-menu">
+          <li><button class="active" onclick="switchPatientView('patient-dashboard')">Dashboard</button></li>
+          <li><button onclick="switchPatientView('patient-treatment')">Tratamiento</button></li>
+          <li><button onclick="switchPatientView('patient-record')">Registrar Síntomas</button></li>
+          <li><button onclick="switchPatientView('patient-history')">Histórico</button></li>
+          <li><button onclick="switchPatientView('patient-recommendations')">Recomendaciones</button></li>
+          <li><button onclick="switchPatientView('patient-alarms')">Signos de Alarma</button></li>
+        </ul>
+      </nav>
 
-        <main>
+      <main style="max-width: 1000px; margin: 0 auto;">
           <!-- Patient Dashboard -->
           <div id="patient-dashboard" class="view-content">
             <div class="card">
@@ -1086,7 +1126,6 @@
             </div>
           </div>
         </main>
-      </div>
     </div>
   </div>
 
