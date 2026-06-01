@@ -683,8 +683,11 @@
               <h3>Últimos Signos Vitales</h3>
               <div id="patient-vitals-detail"></div>
 
-              <h3>Alertas Activas</h3>
+              <h3 style="margin-top: 16px;">Alertas Activas</h3>
               <div id="patient-alerts-detail"></div>
+
+              <h3 style="margin-top: 16px;">Telemonitoreo (Enfermería)</h3>
+              <div id="patient-surveys-detail"></div>
             </div>
           </div>
 
@@ -1090,6 +1093,63 @@
           </div>
         </main>
       </div>
+    </div>
+  </div>
+
+  <!-- Nurse Survey Modal -->
+  <div id="survey-modal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeSurveyModal()">&times;</span>
+      <h2>📞 Telemonitoreo: <span id="survey-patient-name"></span></h2>
+      <p style="margin-bottom: 16px; color: #666;">Registre las respuestas del paciente durante el seguimiento telefónico estructurado.</p>
+      
+      <form id="survey-form" onsubmit="submitSurvey(event)">
+        <input type="hidden" id="survey-patient-id" name="patient_id">
+        
+        <div class="form-group" style="margin-bottom: 12px;">
+          <label style="display:block; margin-bottom: 5px; font-weight: bold;">1. Signos Vitales Reportados (PA, FC, Peso)</label>
+          <textarea id="survey-vitals" style="width: 100%; padding: 8px;" rows="2" placeholder="Ej: 130/80 mmHg, 75 lpm, 70 kg..." required></textarea>
+        </div>
+        
+        <div class="form-group" style="margin-bottom: 12px;">
+          <label style="display:block; margin-bottom: 5px; font-weight: bold;">2. Síntomas de Insuficiencia Cardíaca (Disnea, Edema, Fatiga)</label>
+          <textarea id="survey-symptoms" style="width: 100%; padding: 8px;" rows="3" placeholder="Ej: Refiere leve falta de aire al caminar rápido, sin edema..." required></textarea>
+        </div>
+        
+        <div class="form-group" style="margin-bottom: 12px;">
+          <label style="display:block; margin-bottom: 5px; font-weight: bold;">3. Gravedad de los Síntomas (Clasificación NYHA)</label>
+          <select id="survey-severity" style="width: 100%; padding: 8px;" required>
+            <option value="">Seleccione...</option>
+            <option value="Clase I (Sin limitación)">Clase I (Sin limitación física)</option>
+            <option value="Clase II (Limitación leve)">Clase II (Limitación leve, síntomas con actividad moderada)</option>
+            <option value="Clase III (Limitación marcada)">Clase III (Limitación marcada, síntomas con actividad mínima)</option>
+            <option value="Clase IV (Incapacidad severa)">Clase IV (Incapacidad severa, síntomas en reposo)</option>
+          </select>
+        </div>
+        
+        <div class="form-group" style="margin-bottom: 12px;">
+          <label style="display:block; margin-bottom: 5px; font-weight: bold;">4. ¿Ha presentado mejoría con el tratamiento actual?</label>
+          <select id="survey-improvement" style="width: 100%; padding: 8px;" required>
+            <option value="">Seleccione...</option>
+            <option value="Sí, mejoría notable">Sí, mejoría notable</option>
+            <option value="Sí, leve mejoría">Sí, leve mejoría</option>
+            <option value="No, sigue igual">No, sigue igual</option>
+            <option value="No, ha empeorado">No, ha empeorado</option>
+          </select>
+        </div>
+        
+        <div class="form-group" style="margin-bottom: 12px;">
+          <label style="display:block; margin-bottom: 5px; font-weight: bold;">5. Evolución General y Control de Síntomas</label>
+          <textarea id="survey-control" style="width: 100%; padding: 8px;" rows="3" placeholder="Resumen de la evolución, adherencia al tratamiento y recomendaciones..." required></textarea>
+        </div>
+        
+        <div class="form-group" style="margin-bottom: 16px;">
+          <label style="display:block; margin-bottom: 5px; font-weight: bold;">6. Notas de Enfermería</label>
+          <textarea id="survey-notes" style="width: 100%; padding: 8px;" rows="2" placeholder="Observaciones adicionales..."></textarea>
+        </div>
+        
+        <button type="submit" style="width: 100%; padding: 12px; background: #2563eb; color: white; border: none; border-radius: 4px; font-size: 16px; cursor: pointer;">Guardar Encuesta en Historia Clínica</button>
+      </form>
     </div>
   </div>
 

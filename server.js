@@ -9,6 +9,7 @@ const authRoutes = require('./backend/routes/auth');
 const patientRoutes = require('./backend/routes/patients');
 const recordRoutes = require('./backend/routes/records');
 const alertRoutes = require('./backend/routes/alerts');
+const surveyRoutes = require('./backend/routes/surveys');
 const sheetsSync = require('./backend/services/google-sheets');
 
 const app = express();
@@ -35,6 +36,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/patients', patientRoutes);
 app.use('/api/records', recordRoutes);
 app.use('/api/alerts', alertRoutes);
+app.use('/api/surveys', surveyRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {

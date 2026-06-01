@@ -200,6 +200,22 @@ async function viewPatientDetail(patientId) {
 
     document.getElementById('patient-alerts-detail').innerHTML = alertsHtml || '<p style="color: #6b6b6b;">Sin alertas</p>';
 
+    const surveysHtml = (currentPatient.surveys || []).map(s => `
+      <div style="padding: 12px; border: 1px solid #e5e5e5; border-radius: 6px; margin-bottom: 8px;">
+        <div style="font-weight: 500; display: flex; justify-content: space-between;">
+          <span>📞 Evaluado por: ${s.nurse_name}</span>
+          <span style="color: #6b6b6b; font-size: 12px;">${new Date(s.recorded_date).toLocaleString('es-ES')}</span>
+        </div>
+        <div style="font-size: 13px; color: #374151; margin-top: 8px;">
+          <p><strong>Síntomas (NYHA):</strong> ${s.severity}</p>
+          <p><strong>Evolución:</strong> ${s.control_status}</p>
+          <p><strong>Mejoría:</strong> ${s.improvement}</p>
+        </div>
+      </div>
+    `).join('');
+
+    document.getElementById('patient-surveys-detail').innerHTML = surveysHtml || '<p style="color: #6b6b6b;">Sin encuestas telefónicas</p>';
+
     document.getElementById('patient-detail-modal').classList.add('active');
   } catch (error) {
     console.error('Error loading patient detail:', error);
@@ -361,14 +377,30 @@ async function loadMonitorDashboard() {
     });
     patients = await response.json();
 
-    const html = patients.map(p => `
-      <div style="padding: 16px; border: 1px solid #e5e5e5; border-radius: 8px; margin-bottom: 12px;">
-        <div style="font-weight: 500;">${p.name}</div>
-        <div style="font-size: 13px; color: #6b6b6b; margin-top: 4px;">
-          Email: ${p.email} | Edad: ${p.age || '-'}
-        </div>
-      </div>
-    `).join('');
+    const html = `
+      <table class="data-table" style="width: 100%; border-collapse: collapse; margin-top: 16px;">
+        <thead>
+          <tr>
+            <th style="text-align: left; padding: 12px; border-bottom: 2px solid #e5e5e5;">Nombre del Paciente</th>
+            <th style="text-align: left; padding: 12px; border-bottom: 2px solid #e5e5e5;">Teléfono</th>
+            <th style="text-align: left; padding: 12px; border-bottom: 2px solid #e5e5e5;">Edad</th>
+            <th style="text-align: right; padding: 12px; border-bottom: 2px solid #e5e5e5;">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${patients.map(p => `
+            <tr>
+              <td style="padding: 12px; border-bottom: 1px solid #e5e5e5; font-weight: 500;">${p.name}</td>
+              <td style="padding: 12px; border-bottom: 1px solid #e5e5e5; color: #0284c7; font-weight: bold;">${p.phone || 'No registrado'}</td>
+              <td style="padding: 12px; border-bottom: 1px solid #e5e5e5;">${p.age || '-'}</td>
+              <td style="padding: 12px; border-bottom: 1px solid #e5e5e5; text-align: right;">
+                <button onclick="openSurveyModal(${p.id}, '${p.name.replace(/'/g, "\\'")}')" style="background-color: #2563eb; color: white; padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer;">📞 Llamar / Encuesta</button>
+              </td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    `;
 
     document.getElementById('monitor-patients-list').innerHTML = html;
   } catch (error) {
@@ -408,6 +440,56 @@ function switchMonitorView(viewName) {
 
   document.querySelectorAll('#monitor-screen .sidebar-menu button').forEach(b => b.classList.remove('active'));
   event.target.classList.add('active');
+}
+
+// ==================== Nurse Survey ====================
+
+function openSurveyModal(patientId, patientName) {
+  document.getElementById('survey-patient-id').value = patientId;
+  document.getElementById('survey-patient-name').textContent = patientName;
+  document.getElementById('survey-form').reset();
+  document.getElementById('survey-modal').classList.add('active');
+}
+
+function closeSurveyModal() {
+  document.getElementById('survey-modal').classList.remove('active');
+}
+
+async function submitSurvey(event) {
+  event.preventDefault();
+  
+  const payload = {
+    user_id: document.getElementById('survey-patient-id').value,
+    nurse_id: currentUser.id,
+    vitals: document.getElementById('survey-vitals').value,
+    symptoms: document.getElementById('survey-symptoms').value,
+    severity: document.getElementById('survey-severity').value,
+    improvement: document.getElementById('survey-improvement').value,
+    control_status: document.getElementById('survey-control').value,
+    notes: document.getElementById('survey-notes').value
+  };
+
+  try {
+    const response = await fetch(`${API_URL}/surveys`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      },
+      body: JSON.stringify(payload)
+    });
+
+    if (response.ok) {
+      alert('Encuesta guardada exitosamente en la historia clínica del paciente.');
+      closeSurveyModal();
+    } else {
+      const data = await response.json();
+      alert('Error: ' + data.error);
+    }
+  } catch (error) {
+    console.error('Error submitting survey:', error);
+    alert('Ocurrió un error al guardar la encuesta.');
+  }
 }
 
 // ==================== Init ====================

@@ -95,6 +95,24 @@ const init = async () => {
       )
     `);
 
+    // Nurse Surveys table
+    await run(`
+      CREATE TABLE IF NOT EXISTS nurse_surveys (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER NOT NULL,
+        nurse_id INTEGER NOT NULL,
+        vitals TEXT,
+        symptoms TEXT,
+        severity TEXT,
+        improvement TEXT,
+        control_status TEXT,
+        notes TEXT,
+        recorded_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY(user_id) REFERENCES users(id),
+        FOREIGN KEY(nurse_id) REFERENCES users(id)
+      )
+    `);
+
     // BNP history table
     await run(`
       CREATE TABLE IF NOT EXISTS bnp_records (

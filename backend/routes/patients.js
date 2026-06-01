@@ -48,11 +48,22 @@ router.get('/:id', async (req, res) => {
       [req.params.id]
     );
 
+    // Get surveys
+    const surveys = await db.all(
+      `SELECT s.*, u.name as nurse_name 
+       FROM nurse_surveys s
+       JOIN users u ON s.nurse_id = u.id
+       WHERE s.user_id = ? 
+       ORDER BY s.recorded_date DESC`,
+      [req.params.id]
+    );
+
     res.json({
       ...patient,
       vitals,
       alerts,
       medications,
+      surveys,
       latestVital: vitals[0] || null
     });
   } catch (error) {
