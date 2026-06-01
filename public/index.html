@@ -718,6 +718,7 @@
           <h3>Mi Salud</h3>
           <ul class="sidebar-menu">
             <li><button class="active" onclick="switchPatientView('patient-dashboard')">Dashboard</button></li>
+            <li><button onclick="switchPatientView('patient-treatment')">Tratamiento Farmacológico</button></li>
             <li><button onclick="switchPatientView('patient-record')">Registrar Síntomas</button></li>
             <li><button onclick="switchPatientView('patient-history')">Histórico</button></li>
             <li><button onclick="switchPatientView('patient-recommendations')">Recomendaciones</button></li>
@@ -979,6 +980,70 @@
                     </div>
                   </div>
                 </div>
+              </div>
+            </div>
+            </div>
+          </div>
+
+          <!-- Treatment -->
+          <div id="patient-treatment" class="view-content" style="display: none;">
+            <div class="card">
+              <h2>💊 Tratamiento Farmacológico Base</h2>
+              <div style="margin-top: 16px;">
+                <p style="color: #6b6b6b; margin-bottom: 16px;">Guía de los medicamentos más comunes recetados para la Insuficiencia Cardíaca y su uso. <strong>Nunca te automediques ni cambies las dosis sin consultar a tu médico.</strong></p>
+
+                <div class="alert info" style="margin-bottom: 16px; border-left-color: #3b82f6; background: #eff6ff;">
+                  <div class="alert-content">
+                    <div class="alert-title" style="color: #1e40af;">Diuréticos (Ej: Furosemida, Torasemida)</div>
+                    <div class="alert-message" style="color: #1d4ed8;">
+                      <p><strong>Uso principal:</strong> Eliminar el exceso de líquido del cuerpo a través de la orina.</p>
+                      <ul style="margin-left: 20px; margin-top: 8px;">
+                        <li><strong>Indicación para el paciente:</strong> Si notas que tienes <strong>edema (hinchazón) en las piernas, tobillos o abdomen</strong>, o si tienes un <strong>aumento brusco de peso (más de 2kg)</strong>, este es el medicamento que tu médico suele indicar para ayudarte a bajar esa hinchazón.</li>
+                        <li><strong>Precaución:</strong> Aumentarán tus ganas de orinar. Suele recomendarse tomarlos por la mañana.</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="alert info" style="margin-bottom: 16px; border-left-color: #10b981; background: #ecfdf5;">
+                  <div class="alert-content">
+                    <div class="alert-title" style="color: #065f46;">Betabloqueantes (Ej: Bisoprolol, Carvedilol, Metoprolol)</div>
+                    <div class="alert-message" style="color: #047857;">
+                      <p><strong>Uso principal:</strong> Proteger al corazón, hacer que lata más lento y con menos esfuerzo.</p>
+                      <ul style="margin-left: 20px; margin-top: 8px;">
+                        <li><strong>Indicación para el paciente:</strong> Son la base del tratamiento a largo plazo. Ayudan a que el corazón no se "agote" y mejoran tu supervivencia.</li>
+                        <li><strong>Precaución:</strong> Pueden causarte fatiga leve al inicio. Nunca los suspendas de golpe, ya que puede provocar un aumento peligroso de la frecuencia cardíaca.</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="alert info" style="margin-bottom: 16px; border-left-color: #8b5cf6; background: #f5f3ff;">
+                  <div class="alert-content">
+                    <div class="alert-title" style="color: #4c1d95;">Inhibidores SGLT2 (Ej: Dapagliflozina, Empagliflozina)</div>
+                    <div class="alert-message" style="color: #5b21b6;">
+                      <p><strong>Uso principal:</strong> Inicialmente creados para la diabetes, han demostrado ser excelentes para proteger el corazón y los riñones en la insuficiencia cardíaca.</p>
+                      <ul style="margin-left: 20px; margin-top: 8px;">
+                        <li><strong>Indicación para el paciente:</strong> Parte de los "4 pilares" modernos del tratamiento. Ayudan a que te sientas mejor, tengas más energía y evites hospitalizaciones.</li>
+                        <li><strong>Precaución:</strong> Hacen que elimines azúcar por la orina, por lo que es vital mantener una excelente higiene íntima para evitar infecciones urinarias.</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="alert info" style="margin-bottom: 16px; border-left-color: #f59e0b; background: #fffbeb;">
+                  <div class="alert-content">
+                    <div class="alert-title" style="color: #92400e;">ARNI / IECAS / ARA-II (Ej: Sacubitrilo/Valsartán, Enalapril, Losartán)</div>
+                    <div class="alert-message" style="color: #b45309;">
+                      <p><strong>Uso principal:</strong> Relajan y ensanchan los vasos sanguíneos, reduciendo la presión arterial y facilitando el bombeo del corazón.</p>
+                      <ul style="margin-left: 20px; margin-top: 8px;">
+                        <li><strong>Indicación para el paciente:</strong> Previenen que el corazón cambie de forma (remodelado) y mejoran el flujo sanguíneo. Son cruciales si tu presión arterial tiende a estar alta.</li>
+                        <li><strong>Precaución:</strong> Pueden causar tos seca (especialmente los IECAS) o mareos al levantarte rápido por la bajada de presión.</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
               </div>
             </div>
           </div>
