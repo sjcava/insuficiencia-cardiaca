@@ -721,6 +721,7 @@
             <li><button onclick="switchPatientView('patient-record')">Registrar Síntomas</button></li>
             <li><button onclick="switchPatientView('patient-history')">Histórico</button></li>
             <li><button onclick="switchPatientView('patient-recommendations')">Recomendaciones</button></li>
+            <li><button onclick="switchPatientView('patient-alarms')">Signos de Alarma</button></li>
           </ul>
         </aside>
 
@@ -919,6 +920,65 @@
                   </div>
                 </div>
 
+              </div>
+            </div>
+            </div>
+          </div>
+
+          <!-- Alarms -->
+          <div id="patient-alarms" class="view-content" style="display: none;">
+            <div class="card">
+              <h2>🚨 Signos de Alarma (Red Flags)</h2>
+              <div style="margin-top: 16px;">
+                <p style="color: #6b6b6b; margin-bottom: 16px;">Acude de manera inmediata al centro de salud o servicio de urgencias más cercano si presentas <strong>uno o más</strong> de los siguientes signos de alarma:</p>
+                
+                <div class="alert critical" style="margin-bottom: 16px; border-left-color: #991b1b; background: #fef2f2;">
+                  <div class="alert-content">
+                    <div class="alert-title" style="color: #7f1d1d;">Falta de Aire (Disnea) Grave</div>
+                    <div class="alert-message" style="color: #7f1d1d;">
+                      <ul style="margin-left: 20px; margin-top: 8px;">
+                        <li>Sensación de asfixia o dificultad para respirar severa, incluso estando en reposo.</li>
+                        <li>Despertar bruscamente en la noche con sensación de ahogo (Disnea paroxística nocturna).</li>
+                        <li>Incapacidad total para acostarte boca arriba (Ortopnea severa) y necesidad de dormir sentado.</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="alert critical" style="margin-bottom: 16px; border-left-color: #991b1b; background: #fef2f2;">
+                  <div class="alert-content">
+                    <div class="alert-title" style="color: #7f1d1d;">Síntomas Neurológicos y Mareos</div>
+                    <div class="alert-message" style="color: #7f1d1d;">
+                      <ul style="margin-left: 20px; margin-top: 8px;">
+                        <li>Pérdida de conocimiento, desmayo (síncope) o estado de confusión mental repentina.</li>
+                        <li>Mareos intensos y persistentes que no mejoran al acostarte.</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="alert critical" style="margin-bottom: 16px; border-left-color: #991b1b; background: #fef2f2;">
+                  <div class="alert-content">
+                    <div class="alert-title" style="color: #7f1d1d;">Dolor en el Pecho</div>
+                    <div class="alert-message" style="color: #7f1d1d;">
+                      <ul style="margin-left: 20px; margin-top: 8px;">
+                        <li>Dolor u opresión intensa en el centro del pecho que dura más de unos minutos.</li>
+                        <li>Dolor en el pecho acompañado de sudoración fría, náuseas o dolor irradiado al brazo izquierdo, cuello o mandíbula.</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="alert critical" style="margin-bottom: 16px; border-left-color: #991b1b; background: #fef2f2;">
+                  <div class="alert-content">
+                    <div class="alert-title" style="color: #7f1d1d;">Palpitaciones Extremas o Ritmo Irregular</div>
+                    <div class="alert-message" style="color: #7f1d1d;">
+                      <ul style="margin-left: 20px; margin-top: 8px;">
+                        <li>Sensación de que el corazón "se sale del pecho" (Frecuencia mayor a 120 lpm en reposo) acompañado de malestar general o mareo.</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
