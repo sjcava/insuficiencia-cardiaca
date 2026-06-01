@@ -11,7 +11,7 @@ const SEED_DATA = {
       role: 'patient',
       age: 68,
       phone: '+34 612 345 678',
-      condition_details: 'Heart failure, NYHA Class II, hypertension'
+      condition_details: 'Insuficiencia cardíaca, Clase II NYHA, hipertensión'
     },
     {
       email: 'maria.rodriguez@example.com',
@@ -20,7 +20,7 @@ const SEED_DATA = {
       role: 'patient',
       age: 72,
       phone: '+34 623 456 789',
-      condition_details: 'Systolic heart failure, arrhythmia history'
+      condition_details: 'Insuficiencia cardíaca sistólica, antecedentes de arritmia'
     },
     {
       email: 'carlos.fernandez@example.com',
@@ -29,7 +29,7 @@ const SEED_DATA = {
       role: 'patient',
       age: 65,
       phone: '+34 634 567 890',
-      condition_details: 'Preserved ejection fraction HF, diabetes'
+      condition_details: 'IC con fracción de eyección preservada, diabetes'
     },
     {
       email: 'ana.moreno@example.com',
@@ -38,7 +38,7 @@ const SEED_DATA = {
       role: 'patient',
       age: 70,
       phone: '+34 645 678 901',
-      condition_details: 'Acute decompensated HF, recent hospitalization'
+      condition_details: 'IC aguda descompensada, hospitalización reciente'
     },
     {
       email: 'luis.torres@example.com',
@@ -47,7 +47,7 @@ const SEED_DATA = {
       role: 'patient',
       age: 66,
       phone: '+34 656 789 012',
-      condition_details: 'Heart failure with reduced EF, chronic kidney disease'
+      condition_details: 'Insuficiencia cardíaca con FE reducida, enfermedad renal crónica'
     }
   ],
 
