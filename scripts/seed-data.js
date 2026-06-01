@@ -159,13 +159,13 @@ const generateBNPRecords = (userId, count = 8) => {
 
 const seedDatabase = async () => {
   try {
-    console.log('🌱 Checking database status...\n');
+    console.log('Checking database status...\n');
     await db.init();
 
     // Check if we need to seed
     const existingUsers = await db.all("SELECT id FROM users LIMIT 1");
     if (existingUsers.length > 0) {
-      console.log('✅ Database is already seeded. Skipping seed process.');
+      console.log('Database is already seeded. Skipping seed process.');
       db.db.close((err) => {
         if (err) console.error(err);
         process.exit(0);
@@ -173,7 +173,7 @@ const seedDatabase = async () => {
       return;
     }
     
-    console.log('🌱 Seeding database with demo data...\n');
+    console.log('Seeding database with demo data...\n');
     
     // Create all users and collect their IDs
     let patientIds = [];
@@ -197,7 +197,7 @@ const seedDatabase = async () => {
         ]
       );
       patientIds.push(result.lastID);
-      console.log(`✅ Created patient: ${patient.name}`);
+      console.log(`Created patient: ${patient.name}`);
     }
 
     // Insert doctors
@@ -217,7 +217,7 @@ const seedDatabase = async () => {
         ]
       );
       doctorIds.push(result.lastID);
-      console.log(`✅ Created doctor: ${doctor.name}`);
+      console.log(`Created doctor: ${doctor.name}`);
     }
 
     // Insert monitors
@@ -237,10 +237,10 @@ const seedDatabase = async () => {
         ]
       );
       monitorIds.push(result.lastID);
-      console.log(`✅ Created monitor: ${monitor.name}`);
+      console.log(`Created monitor: ${monitor.name}`);
     }
 
-    console.log('\n📊 Generating vital records...\n');
+    console.log('\nGenerating vital records...\n');
 
     // Generate vital records for each patient
     for (let i = 0; i < patientIds.length; i++) {
@@ -266,10 +266,10 @@ const seedDatabase = async () => {
         );
       }
 
-      console.log(`✅ Created ${records.length} vital records for patient ${i + 1}/5`);
+      console.log(`Created ${records.length} vital records for patient ${i + 1}/5`);
     }
 
-    console.log('\n🩺 Generating BNP records...\n');
+    console.log('\nGenerating BNP records...\n');
 
     // Generate BNP records
     for (let i = 0; i < patientIds.length; i++) {
@@ -284,10 +284,10 @@ const seedDatabase = async () => {
         );
       }
 
-      console.log(`✅ Created ${bnpRecords.length} BNP records for patient ${i + 1}/5`);
+      console.log(`Created ${bnpRecords.length} BNP records for patient ${i + 1}/5`);
     }
 
-    console.log('\n💊 Adding sample medications...\n');
+    console.log('\nAdding sample medications...\n');
 
     // Add sample medications
     const medications = [
@@ -313,10 +313,10 @@ const seedDatabase = async () => {
       }
     }
 
-    console.log(`✅ Added medications for all patients`);
+    console.log(`Added medications for all patients`);
 
-    console.log('\n🎉 Database seeding complete!');
-    console.log('\n📝 Test Login Credentials:');
+    console.log('\n*** Database seeding complete! ***');
+    console.log('\n--- Test Login Credentials ---');
     console.log('  Patient: paciente@mail.com / password123');
     console.log('  Doctor: medico@cmdlt.com / password123');
     console.log('  Nurse: enfermera@cmdlt.com / password123');
@@ -326,7 +326,7 @@ const seedDatabase = async () => {
       process.exit(0);
     });
   } catch (error) {
-    console.error('❌ Seeding error:', error);
+    console.error('Seeding error:', error);
     process.exit(1);
   }
 };

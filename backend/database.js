@@ -11,8 +11,8 @@ if (!fs.existsSync(dataDir)) {
 }
 
 const db = new sqlite3.Database(dbPath, (err) => {
-  if (err) console.error('❌ DB connection error:', err);
-  else console.log(`✅ Connected to SQLite at ${dbPath}`);
+  if (err) console.error('DB connection error:', err);
+  else console.log(`Connected to SQLite at ${dbPath}`);
 });
 
 // Promisified db.run
@@ -126,9 +126,9 @@ const init = async () => {
     await run(`CREATE INDEX IF NOT EXISTS idx_alerts_user_id ON alerts(user_id)`);
     await run(`CREATE INDEX IF NOT EXISTS idx_alerts_severity ON alerts(severity)`);
 
-    console.log('✅ Database schema initialized');
+    console.log('Database schema initialized');
   } catch (error) {
-    console.error('❌ Database initialization error:', error);
+    console.error('Database initialization error:', error);
     throw error;
   }
 };

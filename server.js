@@ -24,9 +24,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Initialize database
 db.init().then(() => {
-  console.log('✅ Database initialized');
+  console.log('Database initialized');
 }).catch(err => {
-  console.error('❌ Database init error:', err);
+  console.error('Database init error:', err);
   process.exit(1);
 });
 
@@ -58,7 +58,7 @@ app.get('*', (req, res) => {
 
 // Error handler
 app.use((err, req, res, next) => {
-  console.error('❌ Error:', err);
+  console.error('Error:', err);
   res.status(500).json({
     error: process.env.NODE_ENV === 'production'
       ? 'Internal server error'
