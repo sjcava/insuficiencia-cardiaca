@@ -23,7 +23,7 @@ const checkAndCreateAlerts = async (userId, vitals) => {
     alerts.push({
       type: 'high_pressure',
       severity: vitals.systolic > 160 ? 'critical' : 'high',
-      message: `High systolic pressure: ${vitals.systolic} mmHg`
+      message: `Tensión sistólica alta: ${vitals.systolic} mmHg`
     });
   }
 
@@ -31,7 +31,7 @@ const checkAndCreateAlerts = async (userId, vitals) => {
     alerts.push({
       type: 'high_pressure',
       severity: vitals.diastolic > 100 ? 'critical' : 'high',
-      message: `High diastolic pressure: ${vitals.diastolic} mmHg`
+      message: `Tensión diastólica alta: ${vitals.diastolic} mmHg`
     });
   }
 
@@ -40,7 +40,7 @@ const checkAndCreateAlerts = async (userId, vitals) => {
     alerts.push({
       type: 'dyspnea',
       severity: vitals.dyspnea_level === 4 ? 'critical' : 'high',
-      message: `Dyspnea level: ${vitals.dyspnea_level}/4 - Increased respiratory distress`
+      message: `Nivel de disnea: ${vitals.dyspnea_level}/4 - Dificultad respiratoria`
     });
   }
 
@@ -49,7 +49,7 @@ const checkAndCreateAlerts = async (userId, vitals) => {
     alerts.push({
       type: 'edema',
       severity: 'high',
-      message: `Edema level: ${vitals.edema_level}/3 - Increased fluid retention`
+      message: `Nivel de edema: ${vitals.edema_level}/3 - Retención de líquidos`
     });
   }
 
@@ -65,11 +65,11 @@ const checkAndCreateAlerts = async (userId, vitals) => {
         [userId, sevenDaysAgo]
       );
 
-      if (prevWeight && (prevWeight.weight - vitals.weight) >= THRESHOLDS.weightGainKg) {
+      if (prevWeight && (vitals.weight - prevWeight.weight) >= THRESHOLDS.weightGainKg) {
         alerts.push({
           type: 'weight_gain',
           severity: 'high',
-          message: `Weight gain alert: +${(prevWeight.weight - vitals.weight).toFixed(1)} kg in 7 days`
+          message: `Alerta de aumento de peso: +${(vitals.weight - prevWeight.weight).toFixed(1)} kg en 7 días`
         });
       }
     } catch (error) {
@@ -82,7 +82,7 @@ const checkAndCreateAlerts = async (userId, vitals) => {
     alerts.push({
       type: 'irregular_hr',
       severity: vitals.heart_rate > 120 ? 'high' : 'medium',
-      message: `High heart rate: ${vitals.heart_rate} bpm`
+      message: `Frecuencia cardíaca alta: ${vitals.heart_rate} lpm`
     });
   }
 
