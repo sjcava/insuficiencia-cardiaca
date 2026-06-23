@@ -7,7 +7,7 @@ const router = express.Router();
 router.get('/', async (req, res) => {
   try {
     const patients = await db.all(
-      'SELECT id, email, name, age, phone, condition_details FROM users WHERE role = "patient" ORDER BY name'
+      'SELECT id, email, name, age, phone, condition_details, next_contact_date FROM users WHERE role = "patient" ORDER BY name'
     );
     res.json(patients);
   } catch (error) {
@@ -76,7 +76,7 @@ router.get('/search/:query', async (req, res) => {
   try {
     const query = `%${req.params.query}%`;
     const patients = await db.all(
-      `SELECT id, email, name, age, phone, condition_details FROM users
+      `SELECT id, email, name, age, phone, condition_details, next_contact_date FROM users
        WHERE role = "patient" AND (name LIKE ? OR email LIKE ?)
        ORDER BY name`,
       [query, query]
@@ -110,6 +110,20 @@ router.post('/:id/medications', async (req, res) => {
       [req.params.id, name, dosage, frequency]
     );
     res.status(201).json({ message: 'Medication added successfully' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Update patient contact date
+router.put('/:id/contact-date', async (req, res) => {
+  try {
+    const { next_contact_date } = req.body;
+    await db.run(
+      'UPDATE users SET next_contact_date = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?',
+      [next_contact_date, req.params.id]
+    );
+    res.json({ message: 'Contact date updated' });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

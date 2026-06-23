@@ -58,10 +58,18 @@ const init = async () => {
         age INTEGER,
         phone TEXT,
         condition_details TEXT,
+        next_contact_date DATE,
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
         updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
       )
     `);
+
+    // Add column if table already exists
+    try {
+      await run(`ALTER TABLE users ADD COLUMN next_contact_date DATE`);
+    } catch (e) {
+      // Column already exists, ignore
+    }
 
     // Vital records table
     await run(`

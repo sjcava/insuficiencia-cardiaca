@@ -467,6 +467,7 @@ async function loadMonitorDashboard() {
             <th style="text-align: left; padding: 12px; border-bottom: 2px solid #e5e5e5;">Nombre del Paciente</th>
             <th style="text-align: left; padding: 12px; border-bottom: 2px solid #e5e5e5;">Teléfono</th>
             <th style="text-align: left; padding: 12px; border-bottom: 2px solid #e5e5e5;">Edad</th>
+            <th style="text-align: left; padding: 12px; border-bottom: 2px solid #e5e5e5;">Fecha Próx. Contacto</th>
             <th style="text-align: right; padding: 12px; border-bottom: 2px solid #e5e5e5;">Acciones</th>
           </tr>
         </thead>
@@ -476,6 +477,9 @@ async function loadMonitorDashboard() {
               <td style="padding: 12px; border-bottom: 1px solid #e5e5e5; font-weight: 500;">${p.name}</td>
               <td style="padding: 12px; border-bottom: 1px solid #e5e5e5; color: #0284c7; font-weight: bold;">${p.phone || 'No registrado'}</td>
               <td style="padding: 12px; border-bottom: 1px solid #e5e5e5;">${p.age || '-'}</td>
+              <td style="padding: 12px; border-bottom: 1px solid #e5e5e5;">
+                <input type="date" value="${p.next_contact_date || ''}" onchange="updateContactDate(${p.id}, this.value)" style="padding: 6px; border: 1px solid #ccc; border-radius: 4px; font-family: inherit;">
+              </td>
               <td style="padding: 12px; border-bottom: 1px solid #e5e5e5; text-align: right;">
                 <button onclick="openSurveyModal(${p.id}, '${p.name.replace(/'/g, "\\'")}')" style="background-color: #2563eb; color: white; padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer;">📞 Llamar / Encuesta</button>
               </td>
@@ -523,6 +527,27 @@ function switchMonitorView(viewName) {
 
   document.querySelectorAll('#monitor-screen .sidebar-menu button').forEach(b => b.classList.remove('active'));
   event.target.classList.add('active');
+}
+
+async function updateContactDate(patientId, newDate) {
+  try {
+    const response = await fetch(`${API_URL}/patients/${patientId}/contact-date`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      },
+      body: JSON.stringify({ next_contact_date: newDate })
+    });
+    
+    if (!response.ok) {
+      const data = await response.json();
+      alert('Error: ' + data.error);
+    }
+  } catch (error) {
+    console.error('Error updating contact date:', error);
+    alert('Error de conexión al actualizar la fecha.');
+  }
 }
 
 // ==================== Nurse Survey ====================
