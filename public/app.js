@@ -490,7 +490,7 @@ async function loadMonitorPatientSurveys() {
         <td style="font-weight: 500;">${s.patient_name}</td>
         <td>${s.shortness_of_breath === 'Sí' ? '<span style="color:red; font-weight:bold;">Sí</span>' : 'No'}</td>
         <td>${s.swelling === 'Sí' ? '<span style="color:#d97706; font-weight:bold;">Sí</span>' : 'No'}</td>
-        <td>${s.weight_gain === 'Sí' ? \`<span style="color:#d97706; font-weight:bold;">Sí (\${s.kilos_gained} kg)</span>\` : 'No'}</td>
+        <td>${s.weight_gain === 'Sí' ? '<span style="color:#d97706; font-weight:bold;">Sí (' + s.kilos_gained + ' kg)</span>' : 'No'}</td>
         <td>${s.fatigue === 'Sí' ? '<span style="color:#d97706; font-weight:bold;">Sí</span>' : 'No'}</td>
         <td>${s.blood_pressure || '-'}</td>
         <td>${s.normal_urination === 'No' ? '<span style="color:#d97706; font-weight:bold;">No</span>' : 'Sí'}</td>
