@@ -525,6 +525,8 @@ function switchMonitorView(viewName) {
 
   if (viewName === 'monitor-alerts') {
     loadMonitorAlerts();
+  } else if (viewName === 'monitor-patients-control') {
+    loadPatientControl('');
   }
 
   document.querySelectorAll('#monitor-screen .sidebar-menu button').forEach(b => b.classList.remove('active'));
@@ -550,6 +552,107 @@ async function updateContactDate(patientId, newDate) {
     console.error('Error updating contact date:', error);
     alert('Error de conexión al actualizar la fecha.');
   }
+}
+
+// ==================== Patient Control & History ====================
+
+async function loadPatientControl(query = '') {
+  try {
+    const url = query.trim() ? `${API_URL}/patients/search/${encodeURIComponent(query)}` : `${API_URL}/patients`;
+    const response = await fetch(url, {
+      headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+    });
+    const patients = await response.json();
+    
+    const html = patients.map(p => `
+      <tr>
+        <td style="font-weight: 600;">${p.name}</td>
+        <td>${p.email}</td>
+        <td>
+          <input type="date" value="${p.next_contact_date ? p.next_contact_date.substring(0,10) : ''}" 
+                 onchange="updateContactDate(${p.id}, this.value)" style="padding: 4px; border-radius: 4px; border: 1px solid #ccc;">
+        </td>
+        <td>
+          <button onclick="viewPatientHistory(${p.id})" class="btn-secondary" style="margin-right: 8px;">Ver Historia</button>
+          <button onclick="openSurveyModal(${p.id}, '${p.name.replace(/'/g, "\\'")}')" class="btn-secondary">Llamar</button>
+        </td>
+      </tr>
+    `).join('');
+    
+    document.getElementById('patient-control-list').innerHTML = html || '<tr><td colspan="4" style="text-align: center; color: #666;">No se encontraron pacientes</td></tr>';
+  } catch (error) {
+    console.error('Error loading patients:', error);
+  }
+}
+
+function handlePatientControlSearch(event) {
+  if (event.key === 'Enter') {
+    loadPatientControl(event.target.value);
+  }
+}
+
+async function viewPatientHistory(patientId) {
+  try {
+    const response = await fetch(`${API_URL}/patients/${patientId}`, {
+      headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+    });
+    const data = await response.json();
+
+    if (data.error) {
+      alert(data.error);
+      return;
+    }
+
+    // Populate Info
+    document.getElementById('history-patient-name').textContent = data.name;
+    document.getElementById('history-patient-age').textContent = data.age || 'N/A';
+    document.getElementById('history-patient-phone').textContent = data.phone || 'N/A';
+    document.getElementById('history-patient-email').textContent = data.email || 'N/A';
+    document.getElementById('history-patient-condition').textContent = data.condition_details || 'Sin detalles registrados';
+
+    // Populate Medications
+    const medsHtml = (data.medications && data.medications.length > 0) 
+      ? data.medications.map(m => `<li><strong>${m.name}</strong> - ${m.dosage} (${m.frequency})</li>`).join('')
+      : '<li>Sin medicación registrada</li>';
+    document.getElementById('history-medications-list').innerHTML = medsHtml;
+
+    // Populate Vitals
+    const vitalsHtml = data.latestVital 
+      ? `<p><strong>Fecha:</strong> ${new Date(data.latestVital.recorded_date).toLocaleString('es-ES')}</p>
+         <p><strong>FC:</strong> ${data.latestVital.heart_rate} bpm</p>
+         <p><strong>PA:</strong> ${data.latestVital.blood_pressure} mmHg</p>
+         <p><strong>Peso:</strong> ${data.latestVital.weight} kg</p>
+         <p><strong>Saturación:</strong> ${data.latestVital.oxygen_saturation}%</p>`
+      : '<p>Sin signos vitales registrados</p>';
+    document.getElementById('history-vitals-container').innerHTML = vitalsHtml;
+
+    // Populate Surveys
+    const surveysHtml = (data.surveys && data.surveys.length > 0)
+      ? data.surveys.map(s => `
+          <div style="border: 1px solid #e5e5e5; border-radius: 6px; padding: 12px; margin-bottom: 12px; background: #fff;">
+            <div style="font-size: 12px; color: #666; margin-bottom: 6px; border-bottom: 1px solid #eee; padding-bottom: 4px;">
+              <strong>Fecha:</strong> ${new Date(s.recorded_date).toLocaleString('es-ES')} | <strong>Enfermera:</strong> ${s.nurse_name}
+            </div>
+            <p style="margin-bottom: 4px;"><strong>Signos:</strong> ${s.vitals}</p>
+            <p style="margin-bottom: 4px;"><strong>Síntomas:</strong> ${s.symptoms}</p>
+            <p style="margin-bottom: 4px;"><strong>Severidad:</strong> ${s.severity} | <strong>Evolución:</strong> ${s.improvement}</p>
+            <p style="margin-bottom: 4px;"><strong>Status:</strong> ${s.control_status}</p>
+            ${s.notes ? `<p style="margin-top: 6px; font-style: italic; color: #444;">" ${s.notes} "</p>` : ''}
+          </div>
+        `).join('')
+      : '<p style="color: #666;">No hay encuestas registradas para este paciente.</p>';
+    document.getElementById('history-surveys-list').innerHTML = surveysHtml;
+
+    // Show modal
+    document.getElementById('history-modal').classList.add('active');
+  } catch (error) {
+    console.error('Error fetching patient history:', error);
+    alert('Error de conexión.');
+  }
+}
+
+function closeHistoryModal() {
+  document.getElementById('history-modal').classList.remove('active');
 }
 
 // ==================== Nurse Survey ====================

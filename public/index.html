@@ -1322,6 +1322,7 @@
           <h3>Menú</h3>
           <ul class="sidebar-menu">
             <li><button class="active" onclick="switchMonitorView('monitor-dashboard')">Dashboard</button></li>
+            <li><button onclick="switchMonitorView('monitor-patients-control')">Control de Pacientes</button></li>
             <li><button onclick="switchMonitorView('monitor-alerts')">Alertas</button></li>
           </ul>
         </aside>
@@ -1334,6 +1335,31 @@
             </div>
           </div>
 
+          <div id="monitor-patients-control" class="view-content" style="display: none;">
+            <div class="card">
+              <h2>👥 Control de Pacientes</h2>
+              <div class="search-box">
+                <input type="text" id="patient-control-search" placeholder="Buscar paciente por nombre o email..." onkeyup="handlePatientControlSearch(event)">
+                <button onclick="loadPatientControl(document.getElementById('patient-control-search').value)">Buscar</button>
+              </div>
+              <div class="table-container">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Nombre</th>
+                      <th>Email</th>
+                      <th>Próx. Contacto</th>
+                      <th>Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody id="patient-control-list">
+                    <!-- Populated by JS -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
           <div id="monitor-alerts" class="view-content" style="display: none;">
             <div class="card">
               <h2>🚨 Alertas del Sistema</h2>
@@ -1341,6 +1367,48 @@
             </div>
           </div>
         </main>
+      </div>
+    </div>
+  </div>
+
+  <!-- History Modal -->
+  <div id="history-modal" class="modal">
+    <div class="modal-content" style="max-width: 900px;">
+      <span class="modal-close" onclick="closeHistoryModal()">&times;</span>
+      <h2>📋 Historia Clínica: <span id="history-patient-name"></span></h2>
+      
+      <div style="margin-top: 24px; display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+        <!-- Info Column -->
+        <div>
+          <div class="card" style="padding: 20px; margin-bottom: 16px;">
+            <h3 style="font-size: 15px; color: var(--primary); margin-bottom: 12px; border-bottom: 1px solid var(--border); padding-bottom: 8px;">Información General</h3>
+            <p><strong>Edad:</strong> <span id="history-patient-age"></span></p>
+            <p><strong>Teléfono:</strong> <span id="history-patient-phone"></span></p>
+            <p><strong>Email:</strong> <span id="history-patient-email"></span></p>
+            <p style="margin-top: 12px;"><strong>Diagnóstico/Condición:</strong></p>
+            <p id="history-patient-condition" style="background: var(--background); padding: 8px; border-radius: 4px; font-size: 14px; margin-top: 4px;"></p>
+          </div>
+
+          <div class="card" style="padding: 20px; margin-bottom: 16px;">
+            <h3 style="font-size: 15px; color: var(--primary); margin-bottom: 12px; border-bottom: 1px solid var(--border); padding-bottom: 8px;">Medicamentos</h3>
+            <ul id="history-medications-list" style="padding-left: 20px; font-size: 14px;"></ul>
+          </div>
+          
+          <div class="card" style="padding: 20px;">
+            <h3 style="font-size: 15px; color: var(--primary); margin-bottom: 12px; border-bottom: 1px solid var(--border); padding-bottom: 8px;">Últimos Signos Vitales</h3>
+            <div id="history-vitals-container" style="font-size: 14px;"></div>
+          </div>
+        </div>
+
+        <!-- Surveys Column -->
+        <div>
+          <div class="card" style="padding: 20px; height: 100%;">
+            <h3 style="font-size: 15px; color: var(--primary); margin-bottom: 12px; border-bottom: 1px solid var(--border); padding-bottom: 8px;">Registro de Encuestas</h3>
+            <div id="history-surveys-list" style="max-height: 500px; overflow-y: auto;">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
