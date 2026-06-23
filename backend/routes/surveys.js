@@ -31,7 +31,8 @@ router.post('/', async (req, res) => {
       severity,
       improvement,
       control_status,
-      notes
+      notes,
+      is_decompensated
     } = req.body;
 
     if (!user_id || !nurse_id) {
@@ -44,6 +45,13 @@ router.post('/', async (req, res) => {
       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
       [user_id, nurse_id, vitals, symptoms, severity, improvement, control_status, notes]
     );
+
+    if (is_decompensated) {
+      await db.run(
+        `INSERT INTO alerts (user_id, type, severity, message) VALUES (?, ?, ?, ?)`,
+        [user_id, 'dyspnea', 'critical', 'Paciente descompensado (Detectado en Telemonitoreo)']
+      );
+    }
 
     res.status(201).json({ id: result.lastID, message: 'Survey saved successfully' });
   } catch (error) {
