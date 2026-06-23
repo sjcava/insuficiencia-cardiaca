@@ -361,73 +361,55 @@ async function loadPatientDashboard() {
       document.getElementById('patient-prescriptions-container').innerHTML = '<p style="color: #6b6b6b;">No tienes tratamientos farmacológicos recetados activos.</p>';
     }
 
-    // Load history
-    loadPatientHistory();
+    // Removed history load since patient-history view was deleted
   } catch (error) {
     console.error('Error loading patient dashboard:', error);
   }
 }
 
-async function loadPatientHistory() {
-  try {
-    const response = await fetch(`${API_URL}/records/patient/${currentUser.id}`, {
-      headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-    });
-    const records = await response.json();
-
-    const tbody = document.getElementById('history-tbody');
-    tbody.innerHTML = records.slice(0, 20).map(r => `
-      <tr>
-        <td>${new Date(r.recorded_date).toLocaleString('es-ES')}</td>
-        <td>${r.systolic}/${r.diastolic}</td>
-        <td>${r.heart_rate}</td>
-        <td>${r.weight}</td>
-        <td>${r.dyspnea_level}</td>
-        <td>${r.edema_level}</td>
-      </tr>
-    `).join('');
-  } catch (error) {
-    console.error('Error loading history:', error);
+function toggleKilosInput(value) {
+  document.getElementById('kilos-container').style.display = (value === 'Sí') ? 'block' : 'none';
+  if (value !== 'Sí') {
+    document.getElementById('survey-kilos').value = '';
   }
 }
 
-async function submitVitalRecord(event) {
+async function submitPatientSurvey(event) {
   event.preventDefault();
 
-  const record = {
+  const survey = {
     user_id: currentUser.id,
-    systolic: parseInt(document.getElementById('record-systolic').value),
-    diastolic: parseInt(document.getElementById('record-diastolic').value),
-    heart_rate: parseInt(document.getElementById('record-hr').value),
-    weight: parseFloat(document.getElementById('record-weight').value),
-    dyspnea_level: parseInt(document.getElementById('record-dyspnea').value),
-    edema_level: parseInt(document.getElementById('record-edema').value),
-    notes: document.getElementById('record-notes').value
+    shortness_of_breath: document.getElementById('survey-shortness').value,
+    swelling: document.getElementById('survey-swelling').value,
+    weight_gain: document.getElementById('survey-weight-gain').value,
+    kilos_gained: parseFloat(document.getElementById('survey-kilos').value) || null,
+    fatigue: document.getElementById('survey-fatigue').value,
+    blood_pressure: document.getElementById('survey-bp').value,
+    normal_urination: document.getElementById('survey-urination').value,
+    loss_of_consciousness: document.getElementById('survey-consciousness').value
   };
 
   try {
-    const response = await fetch(`${API_URL}/records`, {
+    const response = await fetch(`${API_URL}/surveys/patient-survey`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${localStorage.getItem('token')}`
       },
-      body: JSON.stringify(record)
+      body: JSON.stringify(survey)
     });
 
     if (response.ok) {
-      document.getElementById('record-message').textContent = '✅ Registro guardado correctamente';
-      document.getElementById('record-message').style.color = '#17A34A';
-
-      // Reset form
+      document.getElementById('survey-message').textContent = '✅ Encuesta guardada correctamente';
+      document.getElementById('survey-message').style.color = '#17A34A';
       document.getElementById('record-form').reset();
-
-      // Reload dashboard
-      setTimeout(loadPatientDashboard, 1000);
+      toggleKilosInput('No');
+    } else {
+      throw new Error('Error del servidor');
     }
   } catch (error) {
-    document.getElementById('record-message').textContent = '❌ Error al guardar el registro';
-    document.getElementById('record-message').style.color = '#dc2626';
+    document.getElementById('survey-message').textContent = '❌ Error al guardar la encuesta';
+    document.getElementById('survey-message').style.color = '#dc2626';
   }
 }
 
@@ -484,10 +466,44 @@ function switchMonitorView(viewName) {
     loadMonitorAlerts();
   } else if (viewName === 'monitor-patients-control') {
     loadPatientControl('');
+  } else if (viewName === 'monitor-patient-surveys') {
+    loadMonitorPatientSurveys();
   }
 
   document.querySelectorAll('#monitor-screen .sidebar-menu button').forEach(b => b.classList.remove('active'));
-  event.target.classList.add('active');
+  if (event && event.target && event.target.tagName === 'BUTTON') {
+    event.target.classList.add('active');
+  }
+}
+
+async function loadMonitorPatientSurveys() {
+  try {
+    const response = await fetch(`${API_URL}/surveys/patient-survey/all`, {
+      headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+    });
+    const surveys = await response.json();
+
+    const tbody = document.getElementById('monitor-surveys-list');
+    tbody.innerHTML = surveys.map(s => `
+      <tr>
+        <td>${new Date(s.recorded_date).toLocaleString('es-ES')}</td>
+        <td style="font-weight: 500;">${s.patient_name}</td>
+        <td>${s.shortness_of_breath === 'Sí' ? '<span style="color:red; font-weight:bold;">Sí</span>' : 'No'}</td>
+        <td>${s.swelling === 'Sí' ? '<span style="color:#d97706; font-weight:bold;">Sí</span>' : 'No'}</td>
+        <td>${s.weight_gain === 'Sí' ? \`<span style="color:#d97706; font-weight:bold;">Sí (\${s.kilos_gained} kg)</span>\` : 'No'}</td>
+        <td>${s.fatigue === 'Sí' ? '<span style="color:#d97706; font-weight:bold;">Sí</span>' : 'No'}</td>
+        <td>${s.blood_pressure || '-'}</td>
+        <td>${s.normal_urination === 'No' ? '<span style="color:#d97706; font-weight:bold;">No</span>' : 'Sí'}</td>
+        <td>${s.loss_of_consciousness === 'Sí' ? '<span style="color:red; font-weight:bold;">Sí</span>' : 'No'}</td>
+      </tr>
+    `).join('');
+
+    if (surveys.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="9" style="text-align: center; color: #666;">No hay encuestas llenadas por los pacientes</td></tr>';
+    }
+  } catch (error) {
+    console.error('Error fetching patient surveys:', error);
+  }
 }
 
 async function updateContactDate(patientId, newDate) {

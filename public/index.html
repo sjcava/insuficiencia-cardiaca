@@ -974,8 +974,7 @@
         <ul class="horizontal-menu" id="patient-horizontal-menu">
           <li><button class="active" onclick="switchPatientView('patient-dashboard')">Dashboard</button></li>
           <li><button onclick="switchPatientView('patient-treatment')">Tratamiento</button></li>
-          <li><button onclick="switchPatientView('patient-record')">Registrar Síntomas</button></li>
-          <li><button onclick="switchPatientView('patient-history')">Histórico</button></li>
+          <li><button onclick="switchPatientView('patient-record')">Llenar Encuesta</button></li>
           <li><button onclick="switchPatientView('patient-recommendations')">Recomendaciones</button></li>
           <li><button onclick="switchPatientView('patient-alarms')">Signos de Alarma</button></li>
         </ul>
@@ -1012,74 +1011,80 @@
             </div>
           </div>
 
-          <!-- Record Symptoms -->
+          <!-- Record Symptoms (Self-Survey) -->
           <div id="patient-record" class="view-content" style="display: none;">
             <div class="card">
-              <h2>📝 Registrar Síntomas y Signos Vitales</h2>
+              <h2>📝 Encuesta Diaria</h2>
+              <p style="color: #666; margin-bottom: 20px;">Por favor, responde con sinceridad a las siguientes preguntas sobre cómo te sientes hoy.</p>
 
-              <form id="record-form" onsubmit="submitVitalRecord(event)">
+              <form id="record-form" onsubmit="submitPatientSurvey(event)">
                 <div class="form-group">
-                  <label>Presión Sistólica (mmHg)</label>
-                  <input type="number" id="record-systolic" required min="60" max="200">
+                  <label>¿Sientes falta de aire?</label>
+                  <select id="survey-shortness" required>
+                    <option value="" disabled selected>Selecciona una opción</option>
+                    <option value="Sí">Sí</option>
+                    <option value="No">No</option>
+                  </select>
                 </div>
 
                 <div class="form-group">
-                  <label>Presión Diastólica (mmHg)</label>
-                  <input type="number" id="record-diastolic" required min="40" max="120">
+                  <label>¿Tienes hinchazón de pies, tobillos o piernas?</label>
+                  <select id="survey-swelling" required>
+                    <option value="" disabled selected>Selecciona una opción</option>
+                    <option value="Sí">Sí</option>
+                    <option value="No">No</option>
+                  </select>
                 </div>
 
                 <div class="form-group">
-                  <label>Frecuencia Cardíaca (lpm)</label>
-                  <input type="number" id="record-hr" required min="30" max="200">
+                  <label>¿Has notado un aumento de peso brusco?</label>
+                  <select id="survey-weight-gain" required onchange="toggleKilosInput(this.value)">
+                    <option value="" disabled selected>Selecciona una opción</option>
+                    <option value="Sí">Sí</option>
+                    <option value="No">No</option>
+                  </select>
+                </div>
+
+                <div class="form-group" id="kilos-container" style="display: none;">
+                  <label>¿Cuántos kilos subió aproximadamente?</label>
+                  <input type="number" id="survey-kilos" min="0.1" step="0.1" placeholder="Ej: 2.5">
                 </div>
 
                 <div class="form-group">
-                  <label>Peso (kg)</label>
-                  <input type="number" id="record-weight" required min="30" max="200" step="0.1">
+                  <label>¿Sientes fatiga o cansancio inusual?</label>
+                  <select id="survey-fatigue" required>
+                    <option value="" disabled selected>Selecciona una opción</option>
+                    <option value="Sí">Sí</option>
+                    <option value="No">No</option>
+                  </select>
                 </div>
 
                 <div class="form-group">
-                  <label>Disnea (0=ninguna, 4=grave)</label>
-                  <input type="number" id="record-dyspnea" required min="0" max="4">
+                  <label>Registro de tu toma de presión (SYS/DIA)</label>
+                  <input type="text" id="survey-bp" required placeholder="Ej: 120/80">
                 </div>
 
                 <div class="form-group">
-                  <label>Edema (0=ninguno, 3=grave)</label>
-                  <input type="number" id="record-edema" required min="0" max="3">
+                  <label>¿Has orinado normal?</label>
+                  <select id="survey-urination" required>
+                    <option value="" disabled selected>Selecciona una opción</option>
+                    <option value="Sí">Sí</option>
+                    <option value="No">No</option>
+                  </select>
                 </div>
 
                 <div class="form-group">
-                  <label>Notas Adicionales</label>
-                  <textarea id="record-notes" placeholder="Cómo se siente hoy..."
-                    style="width: 100%; padding: 10px; border: 1px solid #e5e5e5; border-radius: 6px; resize: vertical; min-height: 80px;"></textarea>
+                  <label>¿Has tenido alguna pérdida de la consciencia o desmayo?</label>
+                  <select id="survey-consciousness" required>
+                    <option value="" disabled selected>Selecciona una opción</option>
+                    <option value="Sí">Sí</option>
+                    <option value="No">No</option>
+                  </select>
                 </div>
 
-                <button type="submit" class="btn btn-primary">Guardar Registro</button>
-                <div id="record-message" style="margin-top: 12px;"></div>
+                <button type="submit" class="btn btn-primary" style="margin-top: 10px;">Guardar Encuesta</button>
+                <div id="survey-message" style="margin-top: 12px; font-weight: 500;"></div>
               </form>
-            </div>
-          </div>
-
-          <!-- History -->
-          <div id="patient-history" class="view-content" style="display: none;">
-            <div class="card">
-              <h2>📊 Histórico de Registros</h2>
-              <div class="table-container">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Fecha</th>
-                      <th>Presión (SYS/DIA)</th>
-                      <th>FC (lpm)</th>
-                      <th>Peso (kg)</th>
-                      <th>Disnea</th>
-                      <th>Edema</th>
-                    </tr>
-                  </thead>
-                  <tbody id="history-tbody">
-                  </tbody>
-                </table>
-              </div>
             </div>
           </div>
 
@@ -1327,6 +1332,7 @@
           <h3>Menú</h3>
           <ul class="sidebar-menu">
             <li><button class="active" onclick="switchMonitorView('monitor-patients-control')">Control de Pacientes</button></li>
+            <li><button onclick="switchMonitorView('monitor-patient-surveys')">Encuestas de Pacientes</button></li>
             <li><button onclick="switchMonitorView('monitor-alerts')">Alertas</button></li>
           </ul>
         </aside>
@@ -1350,6 +1356,32 @@
                     </tr>
                   </thead>
                   <tbody id="patient-control-list">
+                    <!-- Populated by JS -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div id="monitor-patient-surveys" class="view-content" style="display: none;">
+            <div class="card">
+              <h2>📝 Llenado de Encuestas de Pacientes</h2>
+              <div class="table-container">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Fecha y Hora</th>
+                      <th>Paciente</th>
+                      <th>Falta Aire</th>
+                      <th>Hinchazón</th>
+                      <th>Aumento Peso</th>
+                      <th>Fatiga</th>
+                      <th>Presión</th>
+                      <th>Orina</th>
+                      <th>Pérd. Consciencia</th>
+                    </tr>
+                  </thead>
+                  <tbody id="monitor-surveys-list">
                     <!-- Populated by JS -->
                   </tbody>
                 </table>
