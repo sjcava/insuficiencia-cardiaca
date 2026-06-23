@@ -1321,25 +1321,17 @@
         <aside class="sidebar">
           <h3>Menú</h3>
           <ul class="sidebar-menu">
-            <li><button class="active" onclick="switchMonitorView('monitor-dashboard')">Dashboard</button></li>
-            <li><button onclick="switchMonitorView('monitor-patients-control')">Control de Pacientes</button></li>
+            <li><button class="active" onclick="switchMonitorView('monitor-patients-control')">Control de Pacientes</button></li>
             <li><button onclick="switchMonitorView('monitor-alerts')">Alertas</button></li>
           </ul>
         </aside>
 
         <main>
-          <div id="monitor-dashboard" class="view-content">
-            <div class="card">
-              <h2>📋 Estado de Pacientes</h2>
-              <div id="monitor-patients-list"></div>
-            </div>
-          </div>
-
-          <div id="monitor-patients-control" class="view-content" style="display: none;">
+          <div id="monitor-patients-control" class="view-content">
             <div class="card">
               <h2>👥 Control de Pacientes</h2>
               <div class="search-box">
-                <input type="text" id="patient-control-search" placeholder="Buscar paciente por nombre o email..." onkeyup="handlePatientControlSearch(event)">
+                <input type="text" id="patient-control-search" placeholder="Buscar paciente por nombre o teléfono..." onkeyup="handlePatientControlSearch(event)">
                 <button onclick="loadPatientControl(document.getElementById('patient-control-search').value)">Buscar</button>
               </div>
               <div class="table-container">
@@ -1347,7 +1339,7 @@
                   <thead>
                     <tr>
                       <th>Nombre</th>
-                      <th>Email</th>
+                      <th>Teléfono</th>
                       <th>Próx. Contacto</th>
                       <th>Acciones</th>
                     </tr>

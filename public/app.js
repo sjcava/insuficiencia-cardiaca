@@ -74,7 +74,7 @@ function showDashboard(role) {
   } else if (role === 'monitor') {
     document.getElementById('monitor-screen').classList.add('active');
     document.getElementById('monitor-user-name').textContent = currentUser.name;
-    loadMonitorDashboard();
+    loadPatientControl('');
   }
 }
 
@@ -453,49 +453,6 @@ function switchPatientView(viewName) {
   }
 }
 
-// ==================== Monitor Dashboard ====================
-
-async function loadMonitorDashboard() {
-  try {
-    const response = await fetch(`${API_URL}/patients`, {
-      headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-    });
-    patients = await response.json();
-
-    const html = `
-      <table class="data-table" style="width: 100%; border-collapse: collapse; margin-top: 16px;">
-        <thead>
-          <tr>
-            <th style="text-align: left; padding: 12px; border-bottom: 2px solid #e5e5e5;">Nombre del Paciente</th>
-            <th style="text-align: left; padding: 12px; border-bottom: 2px solid #e5e5e5;">Teléfono</th>
-            <th style="text-align: left; padding: 12px; border-bottom: 2px solid #e5e5e5;">Edad</th>
-            <th style="text-align: left; padding: 12px; border-bottom: 2px solid #e5e5e5;">Fecha Próx. Contacto</th>
-            <th style="text-align: right; padding: 12px; border-bottom: 2px solid #e5e5e5;">Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${patients.map(p => `
-            <tr>
-              <td style="padding: 12px; border-bottom: 1px solid #e5e5e5; font-weight: 500;">${p.name}</td>
-              <td style="padding: 12px; border-bottom: 1px solid #e5e5e5; color: #0284c7; font-weight: bold;">${p.phone || 'No registrado'}</td>
-              <td style="padding: 12px; border-bottom: 1px solid #e5e5e5;">${p.age || '-'}</td>
-              <td style="padding: 12px; border-bottom: 1px solid #e5e5e5;">
-                <input type="date" value="${p.next_contact_date || ''}" onchange="updateContactDate(${p.id}, this.value)" style="padding: 6px; border: 1px solid #ccc; border-radius: 4px; font-family: inherit;">
-              </td>
-              <td style="padding: 12px; border-bottom: 1px solid #e5e5e5; text-align: right;">
-                <button onclick="openSurveyModal(${p.id}, '${p.name.replace(/'/g, "\\'")}')" style="background-color: #2563eb; color: white; padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer;">📞 Llamar / Encuesta</button>
-              </td>
-            </tr>
-          `).join('')}
-        </tbody>
-      </table>
-    `;
-
-    document.getElementById('monitor-patients-list').innerHTML = html;
-  } catch (error) {
-    console.error('Error:', error);
-  }
-}
 
 async function loadMonitorAlerts() {
   try {
@@ -566,8 +523,8 @@ async function loadPatientControl(query = '') {
     
     const html = patients.map(p => `
       <tr>
-        <td style="font-weight: 600;">${p.name}</td>
-        <td>${p.email}</td>
+        <td style="font-weight: 600;">${p.name} <span style="font-weight: normal; color: #666; font-size: 0.9em;">(${p.age || 'N/A'} años)</span></td>
+        <td>${p.phone || 'N/A'}</td>
         <td>
           <input type="date" value="${p.next_contact_date ? p.next_contact_date.substring(0,10) : ''}" 
                  onchange="updateContactDate(${p.id}, this.value)" style="padding: 4px; border-radius: 4px; border: 1px solid #ccc;">
