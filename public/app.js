@@ -580,6 +580,8 @@ async function submitSurvey(event) {
   const vitalsText = `PA: ${bp} | Orina: ${urine} | Aumento Peso: ${weightGain}`;
   const symptomsText = `Edema: ${edema} | Hinchazón: ${swelling} | Cansancio: ${fatigue} | Disnea: ${dyspnea}`;
 
+  const isDecompensated = (weightGain === 'Sí' || edema === 'Sí' || swelling === 'Sí' || dyspnea === 'Sí');
+
   const payload = {
     user_id: document.getElementById('survey-patient-id').value,
     nurse_id: currentUser.id,
@@ -588,7 +590,8 @@ async function submitSurvey(event) {
     severity: document.getElementById('survey-severity').value,
     improvement: document.getElementById('survey-improvement').value,
     control_status: document.getElementById('survey-control').value,
-    notes: document.getElementById('survey-notes').value
+    notes: document.getElementById('survey-notes').value,
+    is_decompensated: isDecompensated
   };
 
   try {
