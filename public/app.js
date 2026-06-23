@@ -207,7 +207,9 @@ async function viewPatientDetail(patientId) {
           <span style="color: #6b6b6b; font-size: 12px;">${new Date(s.recorded_date).toLocaleString('es-ES')}</span>
         </div>
         <div style="font-size: 13px; color: #374151; margin-top: 8px;">
-          <p><strong>Síntomas (NYHA):</strong> ${s.severity}</p>
+          <p><strong>Clínica:</strong> ${s.vitals || '-'}</p>
+          <p><strong>Signos:</strong> ${s.symptoms || '-'}</p>
+          <p><strong>Gravedad (NYHA):</strong> ${s.severity}</p>
           <p><strong>Evolución:</strong> ${s.control_status}</p>
           <p><strong>Mejoría:</strong> ${s.improvement}</p>
         </div>
@@ -566,11 +568,23 @@ function closeSurveyModal() {
 async function submitSurvey(event) {
   event.preventDefault();
   
+  const bp = document.getElementById('survey-bp').value;
+  const urine = document.getElementById('survey-urine').value;
+  const weightGain = document.getElementById('survey-weight-gain').value;
+  
+  const edema = document.getElementById('survey-edema').value;
+  const swelling = document.getElementById('survey-swelling').value;
+  const fatigue = document.getElementById('survey-fatigue').value;
+  const dyspnea = document.getElementById('survey-dyspnea').value;
+
+  const vitalsText = `PA: ${bp} | Orina: ${urine} | Aumento Peso: ${weightGain}`;
+  const symptomsText = `Edema: ${edema} | Hinchazón: ${swelling} | Cansancio: ${fatigue} | Disnea: ${dyspnea}`;
+
   const payload = {
     user_id: document.getElementById('survey-patient-id').value,
     nurse_id: currentUser.id,
-    vitals: document.getElementById('survey-vitals').value,
-    symptoms: document.getElementById('survey-symptoms').value,
+    vitals: vitalsText,
+    symptoms: symptomsText,
     severity: document.getElementById('survey-severity').value,
     improvement: document.getElementById('survey-improvement').value,
     control_status: document.getElementById('survey-control').value,

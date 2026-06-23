@@ -1355,14 +1355,67 @@
       <form id="survey-form" onsubmit="submitSurvey(event)">
         <input type="hidden" id="survey-patient-id" name="patient_id">
         
-        <div class="form-group" style="margin-bottom: 12px;">
-          <label style="display:block; margin-bottom: 5px; font-weight: bold;">1. Signos Vitales Reportados (PA, FC, Peso)</label>
-          <textarea id="survey-vitals" style="width: 100%; padding: 8px;" rows="2" placeholder="Ej: 130/80 mmHg, 75 lpm, 70 kg..." required></textarea>
+        <div style="margin-bottom: 16px; border: 1px solid #e5e5e5; padding: 12px; border-radius: 6px;">
+          <h3 style="margin-bottom: 12px; font-size: 15px; color: #1e3a8a;">1. Signos Vitales y Clínicos</h3>
+          
+          <div class="form-group" style="margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between;">
+            <label style="font-weight: 500; margin-bottom: 0;">Presión Arterial:</label>
+            <input type="text" id="survey-bp" style="width: 150px; padding: 6px;" placeholder="Ej: 120/80" required>
+          </div>
+          
+          <div class="form-group" style="margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between;">
+            <label style="font-weight: 500; margin-bottom: 0;">Cantidad de Orina:</label>
+            <input type="text" id="survey-urine" style="width: 150px; padding: 6px;" placeholder="Ej: 1500ml o Normal" required>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between;">
+            <label style="font-weight: 500; margin-bottom: 0;">Aumento de peso:</label>
+            <select id="survey-weight-gain" style="width: 150px; padding: 6px;" required>
+              <option value="">Seleccione...</option>
+              <option value="Sí">Sí</option>
+              <option value="No">No</option>
+            </select>
+          </div>
         </div>
-        
-        <div class="form-group" style="margin-bottom: 12px;">
-          <label style="display:block; margin-bottom: 5px; font-weight: bold;">2. Síntomas de Insuficiencia Cardíaca (Disnea, Edema, Fatiga)</label>
-          <textarea id="survey-symptoms" style="width: 100%; padding: 8px;" rows="3" placeholder="Ej: Refiere leve falta de aire al caminar rápido, sin edema..." required></textarea>
+
+        <div style="margin-bottom: 16px; border: 1px solid #e5e5e5; padding: 12px; border-radius: 6px;">
+          <h3 style="margin-bottom: 12px; font-size: 15px; color: #1e3a8a;">2. Evaluación de Síntomas</h3>
+          
+          <div class="form-group" style="margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between;">
+            <label style="font-weight: 500; margin-bottom: 0;">Edema (General):</label>
+            <select id="survey-edema" style="width: 150px; padding: 6px;" required>
+              <option value="">Seleccione...</option>
+              <option value="Sí">Sí</option>
+              <option value="No">No</option>
+            </select>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between;">
+            <label style="font-weight: 500; margin-bottom: 0;">Hinchazón (pies, tobillos, piernas):</label>
+            <select id="survey-swelling" style="width: 150px; padding: 6px;" required>
+              <option value="">Seleccione...</option>
+              <option value="Sí">Sí</option>
+              <option value="No">No</option>
+            </select>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between;">
+            <label style="font-weight: 500; margin-bottom: 0;">Cansancio / Fatiga:</label>
+            <select id="survey-fatigue" style="width: 150px; padding: 6px;" required>
+              <option value="">Seleccione...</option>
+              <option value="Sí">Sí</option>
+              <option value="No">No</option>
+            </select>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between;">
+            <label style="font-weight: 500; margin-bottom: 0;">Disnea (Falta de aire):</label>
+            <select id="survey-dyspnea" style="width: 150px; padding: 6px;" required>
+              <option value="">Seleccione...</option>
+              <option value="Sí">Sí</option>
+              <option value="No">No</option>
+            </select>
+          </div>
         </div>
         
         <div class="form-group" style="margin-bottom: 12px;">
