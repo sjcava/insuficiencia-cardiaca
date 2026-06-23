@@ -894,25 +894,24 @@
 
           <!-- Patient Detail Modal -->
           <div id="patient-detail-modal" class="modal">
-            <div class="modal-content">
+            <div class="modal-content" style="max-width: 1100px;">
               <button class="modal-close" onclick="closePatientDetail()">×</button>
               <h2 id="patient-detail-name"></h2>
               <p id="patient-detail-condition" style="color: #6b6b6b; margin-bottom: 20px;"></p>
 
-              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+              <div style="display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 24px;">
+                <!-- Columna 1: Signos y Alertas -->
                 <div>
                   <h3>Últimos Signos Vitales</h3>
-                  <div id="patient-vitals-detail"></div>
+                  <div id="patient-vitals-detail" style="margin-bottom: 24px;"></div>
 
-                  <h3 style="margin-top: 16px;">Alertas Activas</h3>
+                  <h3>Alertas Activas</h3>
                   <div id="patient-alerts-detail"></div>
-
-                  <h3 style="margin-top: 16px;">Telemonitoreo (Enfermería)</h3>
-                  <div id="patient-surveys-detail"></div>
                 </div>
                 
+                <!-- Columna 2: Medicamentos -->
                 <div>
-                  <h3>Tratamiento Farmacológico Actual</h3>
+                  <h3>Tratamiento Farmacológico</h3>
                   <div id="patient-medications-detail" style="margin-bottom: 20px;"></div>
 
                   <div style="background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px;">
@@ -935,6 +934,12 @@
                       <button type="submit" class="btn btn-primary" style="margin-top: 8px;">Recetar Tratamiento</button>
                     </form>
                   </div>
+                </div>
+
+                <!-- Columna 3: Encuestas de Enfermería -->
+                <div>
+                  <h3>Historial de Telemonitoreo</h3>
+                  <div id="patient-surveys-detail" style="max-height: 550px; overflow-y: auto; padding-right: 8px;"></div>
                 </div>
               </div>
             </div>
